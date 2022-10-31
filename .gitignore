@@ -2,6 +2,8 @@
 #
 .DS_Store
 
+/android
+/ios
 # Xcode
 #
 build/
@@ -24,6 +26,13 @@ ios/.xcode.env.local
 
 # Android/IntelliJ
 #
+
+android/app/build.gradle
+android/app/src/main/java/com/budgetproject/MainActivity.java
+android/build.gradle
+package-lock.json
+
+
 build/
 .idea
 .gradle
@@ -62,3 +71,16 @@ buck-out/
 # Ruby / CocoaPods
 /ios/Pods/
 /vendor/bundle/
+
+_tests_
+.bundle
+/notinuse
+.buckconfig
+.node-version
+.prettierrc.js
+.ruby-version
+.watchmanconfig
+babel.config
+Gemfile
+
+firebase.js
