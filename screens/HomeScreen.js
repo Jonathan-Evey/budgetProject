@@ -1,12 +1,14 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Modal, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { doc, getDoc } from "firebase/firestore/lite"
 import { auth, db } from '../firebase'
 import BudgetCard from "../component/BudgetCard"
+import StartBudgetModal from '../component/StartBudgetModal'
 
 const HomeScreen = ({ navigation }) => {
 
   const [userData, setUsereData] = useState(null)
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleSignOut = () => {
       auth.signOut(auth)
@@ -18,6 +20,13 @@ const HomeScreen = ({ navigation }) => {
   
   const checkBudget = () => {
     console.log(userData)
+  }
+
+  const openBudgetModal = () => {
+    setModalVisible(true)
+  }
+  const closeBudgetModal = () => {
+    setModalVisible(false)
   }
   
   // useEffect(() => {
@@ -45,7 +54,7 @@ const HomeScreen = ({ navigation }) => {
           <View style={[styles.bar, styles.shortBar]}></View>
         </TouchableOpacity>
       </View>
-      <BudgetCard budget={1000} />
+      <BudgetCard budget={0} openBudgetModal={openBudgetModal} />
       {/* {userData ? <BudgetCard budget={userData.budget} /> : null} */}
       <TouchableOpacity 
         onPress={checkBudget}
@@ -57,6 +66,15 @@ const HomeScreen = ({ navigation }) => {
       >
         <Text style={styles.buttonText}>Sign Out</Text> 
       </TouchableOpacity>
+      <Modal
+        style={styles.modal}
+        animationType="slide"
+        visible={modalVisible}
+        onRequestClose={closeBudgetModal}
+        transparent={true}
+      >
+        <StartBudgetModal closeBudgetModal={closeBudgetModal} />
+      </Modal>
     </View>
   )
 }
@@ -115,5 +133,10 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: '700',
         fontSize: 16,
+    },
+    modal:{
+      justifyContent: "center",
+      alignItems: 'center',
+      backgroundColor: "black",
     },
 })
