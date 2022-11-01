@@ -2,6 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { doc, getDoc } from "firebase/firestore/lite"
 import { auth, db } from '../firebase'
+import BudgetCard from "../component/BudgetCard"
 
 const HomeScreen = ({ navigation }) => {
 
@@ -19,23 +20,33 @@ const HomeScreen = ({ navigation }) => {
     console.log(userData)
   }
   
-  useEffect(() => {
-    const checkForData = async () => {
-      let docRef = doc(db, "users", auth.currentUser.uid);
-      let docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        return setUsereData(docSnap.data())
-      } else {
-        console.log("No such document!");
-      }
-    }
-    checkForData()
-  }, [])
+  // useEffect(() => {
+  //   const checkForData = async () => {
+  //     let docRef = doc(db, "users", auth.currentUser.uid);
+  //     let docSnap = await getDoc(docRef);
+  //     if (docSnap.exists()) {
+  //       return setUsereData(docSnap.data())
+  //     } else {
+  //       console.log("No such document!");
+  //     }
+  //   }
+  //   checkForData()
+  // }, [])
 
   return (
     <View style={styles.container}>
-      <Text> Welcome, {auth.currentUser.displayName ? auth.currentUser.displayName : null}</Text>
-      {userData ? <Text style={styles.budget}>{userData.budget}</Text> : null}
+      <View style={styles.userNav}>
+        <Text style={styles.userName}>Allotment</Text>
+        <TouchableOpacity 
+          style={styles.userMainMenu}
+        >
+          <View style={[styles.bar, styles.midBar]}></View>
+          <View style={[styles.bar, styles.longBar]}></View>
+          <View style={[styles.bar, styles.shortBar]}></View>
+        </TouchableOpacity>
+      </View>
+      <BudgetCard budget={1000} />
+      {/* {userData ? <BudgetCard budget={userData.budget} /> : null} */}
       <TouchableOpacity 
         onPress={checkBudget}
       ><Text>Add</Text></TouchableOpacity>
@@ -55,11 +66,42 @@ export default HomeScreen
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: "#EAF1EE",
     },
-    budget: {
-      backgroundColor: "red",
+    userNav: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      height: "10%",
+      width: "100%",
+      paddingHorizontal: 25,
+    },
+    userMainMenu: {
+      flexDirection: "column",
+      justifyContent: "space-evenly",
+      alignItems: "flex-end",
+      height: 50,
+      width: 50,
+    },
+    bar: {
+      height: 4, 
+      backgroundColor: "#DE2555",
+      borderRadius: 250,
+    },
+    shortBar: {
+      width: "55%",
+    },
+    midBar: {
+      width: "75%",
+    },
+    longBar: {
+      width: "95%",
+    },
+    userName: {
+      color: "#223252",
+      fontWeight: "bold",
+      fontSize: 32,
     },
     button: {
         backgroundColor: '#0782F9',

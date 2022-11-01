@@ -1,7 +1,10 @@
 :root {
-    -clr--light: #EAF1EE;
+    -clr--lightest: #EAF1EE;
+    -clr--light: #dbe2e0;
     -clr--dark: #223252;
     -clr--main: #DE2555;
+
+    -clr--neutral-darkest: #1d1d1d;
 
     -clr--light-accent: #DCA387;
     -clr--dark-accent: #B58C7E;
