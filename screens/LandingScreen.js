@@ -8,7 +8,7 @@ const LandingScreen = ({ navigation }) => {
         <View style={styles.logo}></View>
         <Text style={styles.logoText}>Allotment</Text>
         <View style={styles.message}></View>
-        <Text style={styles.messageText}>Home of your budget and saving plans</Text>
+        <Text style={styles.messageText}>Home of your budget and saving plan</Text>
 
 
       </View>

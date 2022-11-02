@@ -8,6 +8,7 @@ import StartBudgetModal from '../component/StartBudgetModal'
 const HomeScreen = ({ navigation }) => {
 
   const [userData, setUsereData] = useState(null)
+  const [totalBudgetAmount, setTotalBudgetAmount] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleSignOut = () => {
@@ -28,19 +29,35 @@ const HomeScreen = ({ navigation }) => {
   const closeBudgetModal = () => {
     setModalVisible(false)
   }
+
+  const checkForExtraIncome = (budgetData) => {
+    let date = new Date()
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear()
+    console.log(budgetData)
+    console.log(budgetData.additionalIncome.month)
+    console.log(budgetData.additionalIncome.year)
+    if (budgetData.additionalIncome.month === month && budgetData.additionalIncome.year === year) {
+      setTotalBudgetAmount(budgetData.additionalIncome.amount + budgetData.main)
+    } else {
+      return setTotalBudgetAmount(budgetData.main)
+    }
+  }
   
-  // useEffect(() => {
-  //   const checkForData = async () => {
-  //     let docRef = doc(db, "users", auth.currentUser.uid);
-  //     let docSnap = await getDoc(docRef);
-  //     if (docSnap.exists()) {
-  //       return setUsereData(docSnap.data())
-  //     } else {
-  //       console.log("No such document!");
-  //     }
-  //   }
-  //   checkForData()
-  // }, [])
+  useEffect(() => {
+    const checkForData = async () => {
+      let docRef = doc(db, "users", auth.currentUser.uid);
+      let docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        let data = docSnap.data()
+        checkForExtraIncome(data.budget)
+        return setUsereData(data)
+      } else {
+        console.log("No such document!");
+      }
+    }
+    checkForData()
+  }, [])
 
   return (
     <View style={styles.container}>
@@ -54,8 +71,8 @@ const HomeScreen = ({ navigation }) => {
           <View style={[styles.bar, styles.shortBar]}></View>
         </TouchableOpacity>
       </View>
-      <BudgetCard budget={0} openBudgetModal={openBudgetModal} />
-      {/* {userData ? <BudgetCard budget={userData.budget} /> : null} */}
+      {/* <BudgetCard budget={0} openBudgetModal={openBudgetModal} /> */}
+      {userData ? <BudgetCard budget={totalBudgetAmount} openBudgetModal={openBudgetModal} /> : null}
       <TouchableOpacity 
         onPress={checkBudget}
       ><Text>Add</Text></TouchableOpacity>
