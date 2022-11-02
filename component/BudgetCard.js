@@ -10,13 +10,15 @@ const BudgetCard = (props) => {
   }
 
   const [isSeeDetails, setIsSeeDeatils] = useState(false)
-  const [spentPercent, setSpentPercent] = useState(40)
+  const [spentPercent, setSpentPercent] = useState()
+  const [spentOverBudget, setSpentOverBudget] = useState()
 
   const openBudget = () => {
     setIsSeeDeatils(!isSeeDetails)
   }
 
   useEffect(() => {
+    setSpentOverBudget(400 - props.budget)
     setSpentPercent((400 / props.budget) * 100)
   }, [])
 
@@ -25,14 +27,14 @@ const BudgetCard = (props) => {
       {props.budget === 0 ? 
         <View style={[styles.card, styles.elevation, {height: "17.5%"}]}>
           <TouchableOpacity onPress={props.openBudgetModal} style={styles.newBudget}>
-            <Text style={styles.newBudgetText}>Click here to begin your budget journey</Text>
+            <Text style={styles.newBudgetText}>Start here to begin your budget journey</Text>
           </TouchableOpacity>
         </View> 
       : 
         <View style={[styles.card, styles.withBudget, styles.elevation]}>
-          <BudgetComponent budget={props.budget} budgetSpent={400} componentType={componentType.budget}/>
+          <BudgetComponent budget={props.budget} budgetSpent={700} componentType={componentType.budget}/>
           {isSeeDetails ? 
-          <BudgetComponent spent={400} spentPercent={spentPercent} componentType={componentType.spent}/>
+          <BudgetComponent spent={400} spentOverBudget={spentOverBudget} spentPercent={spentPercent} componentType={componentType.spent}/>
 
            : null}
           <View style={styles.btnContainer}>

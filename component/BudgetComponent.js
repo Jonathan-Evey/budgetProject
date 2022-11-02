@@ -8,10 +8,11 @@ const BudgetComponent = (props) => {
       }
 
     const [budgetUsedPercent, setBudgetUsedPercent] = useState()
-    
+      
+
 
     useEffect(() => {
-        setBudgetUsedPercent((500 / props.budget) * 100)
+        setBudgetUsedPercent((700 / props.budget) * 100)
     }, [])
     
 
@@ -22,24 +23,27 @@ const BudgetComponent = (props) => {
         <View style={styles.budgetDetailsTextContainer}>
             <View style={styles.budgetDetailsTextContainerLeft}>
                 <Text style={styles.budgetTitle}>Budget</Text>
-                {/* <Text style={{color: "#223252"}}>{`Used ${500} of`}</Text> */}
+                {budgetUsedPercent < 100 ? <Text style={{color: "#223252"}}>{`Used ${budgetUsedPercent}%`}</Text>
+                : <Text style={{color: "#b31515"}}>{`Used ${budgetUsedPercent}%`}</Text>}
             </View>
             <Text style={styles.budgetTotal}>{props.budget}</Text>
         </View>
-        {budgetUsedPercent ? <View style={[styles.budgetBar, styles.spent, {width: `${budgetUsedPercent}%`}]}></View> : null}
+        {budgetUsedPercent < 100 ? <View style={[styles.budgetBar, styles.spent, {width: `${budgetUsedPercent}%`}]}></View> 
+        :  <View style={[styles.budgetBar, styles.spent, {width: `100%`, backgroundColor: "#b31515"}]}></View>}
         <View style={[styles.budgetBar, styles.total]}></View>
     </View>
     : null}
     {props.componentType === componentType.spent ? 
     <View style={styles.budgetDetails}>
         <View style={styles.budgetDetailsTextContainer}>
-            
+          <View style={styles.budgetDetailsTextContainerLeft}>
             <Text style={[styles.budgetTitle, styles.budgetSupTitle, {marginTop: 10,}]}>Spent</Text>
-            {/* <Text style={{color: "#223252"}}>{`Already spent ${props.spent} of`}</Text> */}
-            
-            <Text style={[styles.budgetTotal]}>{props.spent}</Text>
+            {props.spentPercent > 100 ? <Text style={{color: "#b31515"}}>{`You are ${props.spentOverBudget} over budget`}</Text> : null}
+          </View>
+          <Text style={[styles.budgetTotal]}>{props.spent}</Text>
         </View>
-        {props.spentPercent ? <View style={[styles.budgetBar, styles.spent, {width: `${props.spentPercent}%`}]}></View> : null}
+        {props.spentPercent < 100 ? <View style={[styles.budgetBar, styles.spent, {width: `${props.spentPercent}%`}]}></View> 
+        : <View style={[styles.budgetBar, styles.spent, {width: `100%`, backgroundColor: "#b31515"}]}></View>}
         <View style={[styles.budgetBar, styles.total] }></View>
     </View>
     : null}
@@ -69,7 +73,6 @@ const styles = StyleSheet.create({
       },
       budgetSupTitle: {
         paddingBottom: 5,
-        alignSelf: "flex-end",
       },
       budgetTotal: {
         fontSize: 40,
@@ -92,4 +95,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#223252",
         zIndex: 1,
       },
+      error: {
+        backgroundColor: "#b31515",
+      }
 })
