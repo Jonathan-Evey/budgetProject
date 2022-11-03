@@ -35,7 +35,9 @@ const BudgetCardSpent = props => {
         <View style={[styles.budgetBar, styles.total]}></View>
       </View>
       <View style={styles.btnContainer}>
-        <TouchableOpacity style={styles.btn}>
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={props.openLogExpenseModal}>
           <Text style={styles.btnText}>Log Expense</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btn}>

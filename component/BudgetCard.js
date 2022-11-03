@@ -51,6 +51,7 @@ const BudgetCard = props => {
               spentOverBudget={spentOverBudget}
               spentPercent={spentPercent}
               componentType={componentType.spent}
+              openLogExpenseModal={props.openLogExpenseModal}
             />
           ) : null}
           {!isSeeDetails ? (
@@ -59,7 +60,9 @@ const BudgetCard = props => {
                 styles.btnContainer,
                 {width: '80%', justifyContent: 'space-between'},
               ]}>
-              <TouchableOpacity style={styles.optionsBtn}>
+              <TouchableOpacity
+                style={styles.optionsBtn}
+                onPress={props.openLogExpenseModal}>
                 <Text style={styles.optionsBtnText}>Log Expense</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.optionsBtn} onPress={openBudget}>

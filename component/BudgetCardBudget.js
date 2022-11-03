@@ -61,10 +61,10 @@ const BudgetCardBudget = props => {
           <TouchableOpacity
             style={styles.btn}
             onPress={props.openAddIncomeModal}>
-            <Text style={styles.btnText}>Add Income</Text>
+            <Text style={styles.btnText}>Add Extra Income</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.btn}>
-            <Text style={styles.btnText}>Full Details</Text>
+            <Text style={styles.btnText}>Details</Text>
           </TouchableOpacity>
         </View>
       ) : null}
