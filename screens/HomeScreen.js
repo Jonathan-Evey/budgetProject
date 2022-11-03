@@ -5,17 +5,21 @@ import {auth, db} from '../firebase';
 import BudgetCard from '../component/BudgetCard';
 import StartBudgetModal from '../component/StartBudgetModal';
 import AddIncomeModal from '../component/AddIncomeModal';
+import AddExpenseModal from '../component/AddExpenseModal';
 
 const HomeScreen = ({navigation}) => {
   const [userData, setUsereData] = useState(null);
   const [updateUserData, setUpdateUserData] = useState(false);
-  const [isAdditionalIncome, setIsAdditionalIncome] = useState(false);
   const [totalBudgetAmount, setTotalBudgetAmount] = useState(null);
-  const [isNewBudgetModal, setIsNewBudgetModal] = useState(false);
-  const [isAddIncomeModal, setIsAddIncomeModal] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [isAdditionalIncome, setIsAdditionalIncome] = useState(false);
   const [currentPaidExpenses, setCurrentPaidExpense] = useState(null);
   const [budgetUsedPercent, setBudgetUsedPercent] = useState(null);
+
+  //-----------------------modal states----------------------//
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isNewBudgetModal, setIsNewBudgetModal] = useState(false);
+  const [isLogExpenseModal, setIsLogExpenseModal] = useState(false);
+  const [isAddIncomeModal, setIsAddIncomeModal] = useState(false);
 
   const handleSignOut = () => {
     auth
@@ -30,21 +34,31 @@ const HomeScreen = ({navigation}) => {
     console.log(userData);
   };
 
-  const openAddIncomeModal = () => {
-    setIsAddIncomeModal(true);
-    setModalVisible(true);
-  };
-  const closeAddIncomeModal = () => {
-    setIsAddIncomeModal(false);
-    setModalVisible(false);
-  };
-
+  //------Set up a new budget modal after first log in-----//
   const openBudgetModal = () => {
     setIsNewBudgetModal(true);
     setModalVisible(true);
   };
   const closeBudgetModal = () => {
     setIsNewBudgetModal(false);
+    setModalVisible(false);
+  };
+
+  const openLogExpenseModal = () => {
+    setIsLogExpenseModal(true);
+    setModalVisible(true);
+  };
+  const closeLogExpenseModal = () => {
+    setIsLogExpenseModal(false);
+    setModalVisible(false);
+  };
+
+  const openAddIncomeModal = () => {
+    setIsAddIncomeModal(true);
+    setModalVisible(true);
+  };
+  const closeAddIncomeModal = () => {
+    setIsAddIncomeModal(false);
     setModalVisible(false);
   };
 
@@ -114,6 +128,7 @@ const HomeScreen = ({navigation}) => {
           budgetUsedPercent={budgetUsedPercent}
           budget={totalBudgetAmount}
           openBudgetModal={openBudgetModal}
+          openLogExpenseModal={openLogExpenseModal}
           openAddIncomeModal={openAddIncomeModal}
         />
       ) : null}
@@ -135,6 +150,13 @@ const HomeScreen = ({navigation}) => {
         transparent={true}>
         {isNewBudgetModal ? (
           <StartBudgetModal closeBudgetModal={closeBudgetModal} />
+        ) : null}
+        {isLogExpenseModal ? (
+          <AddExpenseModal
+            closeLogExpenseModal={closeLogExpenseModal}
+            setUpdateUserData={setUpdateUserData}
+            updateUserData={updateUserData}
+          />
         ) : null}
         {isAddIncomeModal ? (
           <AddIncomeModal
