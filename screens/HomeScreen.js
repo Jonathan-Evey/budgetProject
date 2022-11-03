@@ -2,6 +2,7 @@ import {StyleSheet, Modal, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {doc, getDoc} from 'firebase/firestore/lite';
 import {auth, db} from '../firebase';
+import MainNav from '../component/MainNav';
 import BudgetCard from '../component/BudgetCard';
 import StartBudgetModal from '../component/StartBudgetModal';
 import AddIncomeModal from '../component/AddIncomeModal';
@@ -15,20 +16,14 @@ const HomeScreen = ({navigation}) => {
   const [currentPaidExpenses, setCurrentPaidExpense] = useState(null);
   const [budgetUsedPercent, setBudgetUsedPercent] = useState(null);
 
+  //-----------------main nav state----------------------//
+  const [isMainNavOpen, setIsMainNavOpen] = useState(false);
+
   //-----------------------modal states----------------------//
   const [modalVisible, setModalVisible] = useState(false);
   const [isNewBudgetModal, setIsNewBudgetModal] = useState(false);
   const [isLogExpenseModal, setIsLogExpenseModal] = useState(false);
   const [isAddIncomeModal, setIsAddIncomeModal] = useState(false);
-
-  const handleSignOut = () => {
-    auth
-      .signOut(auth)
-      .then(() => {
-        navigation.replace('Landing');
-      })
-      .catch(error => alert(error.message));
-  };
 
   const checkBudget = () => {
     console.log(userData);
@@ -106,6 +101,10 @@ const HomeScreen = ({navigation}) => {
     }
   };
 
+  const backToLanding = () => {
+    navigation.replace('Landing');
+  };
+
   useEffect(() => {
     checkForData();
   }, [updateUserData]);
@@ -114,7 +113,11 @@ const HomeScreen = ({navigation}) => {
     <View style={styles.container}>
       <View style={styles.userNav}>
         <Text style={styles.userName}>Allotment</Text>
-        <TouchableOpacity style={styles.userMainMenu}>
+        <TouchableOpacity
+          style={styles.userMainMenu}
+          onPress={() => {
+            setIsMainNavOpen(!isMainNavOpen);
+          }}>
           <View style={[styles.bar, styles.midBar]}></View>
           <View style={[styles.bar, styles.longBar]}></View>
           <View style={[styles.bar, styles.shortBar]}></View>
@@ -136,9 +139,6 @@ const HomeScreen = ({navigation}) => {
         <Text>Add</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={handleSignOut} style={styles.button}>
-        <Text style={styles.buttonText}>Sign Out</Text>
-      </TouchableOpacity>
       <Modal animationType="fade" visible={modalVisible} transparent={true}>
         <View style={styles.bgModal}></View>
       </Modal>
@@ -168,6 +168,7 @@ const HomeScreen = ({navigation}) => {
           />
         ) : null}
       </Modal>
+      <MainNav isMainNavOpen={isMainNavOpen} backToLanding={backToLanding} />
     </View>
   );
 };
@@ -194,6 +195,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     height: 50,
     width: 50,
+    zIndex: 4,
   },
   bar: {
     height: 4,
@@ -214,30 +216,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 32,
   },
-  button: {
-    backgroundColor: '#0782F9',
-    width: '60%',
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginTop: 40,
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: '700',
-    fontSize: 16,
-  },
   bgModal: {
     height: '100%',
     width: '100%',
     backgroundColor: 'black',
     opacity: 0.85,
-    zIndex: 1,
+    zIndex: 5,
   },
   modal: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'black',
-    zIndex: 2,
+    zIndex: 6,
   },
 });
