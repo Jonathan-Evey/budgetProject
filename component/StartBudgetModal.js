@@ -42,7 +42,7 @@ const StartBudgetModal = (props) => {
 
   const saveBudgetData = async (userID) => {
     await setDoc(doc(db, 'users', userID), {
-      budget: {main: mainBudget}
+      mainBudget: parseInt(mainBudget)
     }).then(() => {
       console.log("data added")
     }).catch((error) =>  {
@@ -51,7 +51,8 @@ const StartBudgetModal = (props) => {
   }
   const saveBudgetDataAdditionalIncome = async (userID, monthData, yearData) => {
     await setDoc(doc(db, 'users', userID), {
-      budget: {main: parseInt(mainBudget), additionalIncome: {amount: parseInt(additionalIncome), month: monthData, year: yearData }}
+      mainBudget: parseInt(mainBudget), 
+      additionalIncome: {amount: parseInt(additionalIncome), month: monthData, year: yearData }
     }).then(() => {
       console.log("data added")
     }).catch((error) =>  {

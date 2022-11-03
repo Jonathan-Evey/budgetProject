@@ -26,12 +26,12 @@ const BudgetCardBudget = (props) => {
           <View style={styles.budgetDetailsTextContainer}>
               <View style={styles.budgetDetailsTextContainerLeft}>
                   <Text style={styles.budgetTitle}>Budget</Text>
-                  {props.budgetUsedPercent < 100 ? <Text style={{color: "#223252"}}>{`Used ${props.budgetUsedPercent}%`}</Text>
+                  {props.budgetUsedPercent < 100 ? <Text style={{color: "#223252"}}>{`Used ${props.budgetUsedPercent.toFixed()}%`}</Text>
                   : <Text style={{color: "#b31515"}}>{`Used ${props.budgetUsedPercent}%`}</Text>}
               </View>
               <Text style={styles.budgetTotal}>{props.budget}</Text>
           </View>
-          {props.budgetUsedPercent < 100 ? <View style={[styles.budgetBar, styles.spent, {width: `${props.budgetUsedPercent}%`}]}></View> 
+          {props.budgetUsedPercent < 100 ? <View style={[styles.budgetBar, styles.spent, {width: `${props.budgetUsedPercent.toFixed()}%`}]}></View> 
           :  <View style={[styles.budgetBar, styles.spent, {width: `100%`, backgroundColor: "#b31515"}]}></View>}
           <View style={[styles.budgetBar, styles.total]}></View>
       </View>

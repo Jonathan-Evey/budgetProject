@@ -16,7 +16,7 @@ const AddIncomeModal = (props) => {
             let year = date.getFullYear()
             let amount = parseInt(ifAdditionalIncome)
             saveAdditionalIncome(auth.currentUser.uid, amount, month, year)
-            props.setUpdateUserData(true)
+            props.setUpdateUserData(!props.updateUserData)
             props.closeAddIncomeModal()
         } else {
            return setNoAdditionalIncomeAddedError(true)
@@ -28,7 +28,7 @@ const AddIncomeModal = (props) => {
             let year = date.getFullYear()
             let amount = parseInt(additionalIncome)
             saveAdditionalIncome(auth.currentUser.uid, amount, month, year)
-            props.setUpdateUserData(true)
+            props.setUpdateUserData(!props.updateUserData)
             props.closeAddIncomeModal()
         } else {
             return setNoAdditionalIncomeAddedError(true)

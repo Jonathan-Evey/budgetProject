@@ -1,6 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import BudgetComponent from "./BudgetComponent"
+import BudgetCardBudget from "./BudgetCardBudget"
+import BudgetCardSpent from './BudgetCardSpent'
 
 const BudgetCard = (props) => {
   
@@ -18,8 +19,8 @@ const BudgetCard = (props) => {
   }
 
   useEffect(() => {
-    setSpentOverBudget(400 - props.budget)
-    setSpentPercent((400 / props.budget) * 100)
+    setSpentOverBudget(200 - props.budget)
+    setSpentPercent((200 / props.budget) * 100)
   }, [])
 
   return (
@@ -32,19 +33,25 @@ const BudgetCard = (props) => {
         </View> 
       : 
         <View style={[styles.card, styles.withBudget, styles.elevation]}>
-          <BudgetComponent budget={props.budget} budgetSpent={700} componentType={componentType.budget}/>
+          <BudgetCardBudget userData={props.userData} budget={props.budget} budgetSpent={700} budgetUsedPercent={props.budgetUsedPercent} componentType={componentType.budget} isSeeDetails={isSeeDetails} openAddIncomeModal={props.openAddIncomeModal}/>
           {isSeeDetails ? 
-          <BudgetComponent spent={400} spentOverBudget={spentOverBudget} spentPercent={spentPercent} componentType={componentType.spent}/>
+          <BudgetCardSpent spent={400} spentOverBudget={spentOverBudget} spentPercent={spentPercent} componentType={componentType.spent}/>
 
            : null}
-          <View style={styles.btnContainer}>
+          {!isSeeDetails ? 
+          <View style={[styles.btnContainer, {width: "80%", justifyContent: "space-between"},]}>
             <TouchableOpacity style={styles.optionsBtn}>
-              <Text style={styles.optionsBtnText}>Log an Expense</Text>
+              <Text style={styles.optionsBtnText}>Log Expense</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.optionsBtn} onPress={openBudget}>
-              <Text style={styles.optionsBtnText}>See Details</Text>
+              <Text style={styles.optionsBtnText}>Details</Text>
             </TouchableOpacity>
-          </View>
+          </View> : 
+          <View style={[styles.btnContainer, {width: "90%", justifyContent: "flex-end", marginTop: 20,}]}>
+            <TouchableOpacity style={styles.optionsBtn} onPress={openBudget}>
+              <Text style={styles.optionsBtnText}>Close</Text>
+            </TouchableOpacity>
+          </View>}
         </View>}
     </>
   )
@@ -83,13 +90,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   btnContainer: {
-    width: "80%",
     flexDirection: "row",
-    justifyContent: "space-between",
     marginTop: 5,
   },
   optionsBtn: {
-    backgroundColor: "#DCA387",
+    backgroundColor: "#223252",
     borderRadius: 250,
     paddingHorizontal: 24,
     paddingVertical: 2,
@@ -97,7 +102,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   optionsBtnText: {
-    color: "#1d1d1d",
+    color: "#ced4d2",
     fontWeight: "bold",
   },
 })

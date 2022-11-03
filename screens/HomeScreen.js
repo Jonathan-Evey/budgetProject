@@ -4,12 +4,19 @@ import { doc, getDoc } from "firebase/firestore/lite"
 import { auth, db } from '../firebase'
 import BudgetCard from "../component/BudgetCard"
 import StartBudgetModal from '../component/StartBudgetModal'
+import AddIncomeModal from '../component/AddIncomeModal'
 
 const HomeScreen = ({ navigation }) => {
 
   const [userData, setUsereData] = useState(null)
+  const [updateUserData, setUpdateUserData] = useState(false)
+  const [isAdditionalIncome, setIsAdditionalIncome] = useState(false)
   const [totalBudgetAmount, setTotalBudgetAmount] = useState(null);
+  const [isNewBudgetModal, setIsNewBudgetModal] = useState(false);
+  const [isAddIncomeModal, setIsAddIncomeModal] = useState(false)
   const [modalVisible, setModalVisible] = useState(false);
+  const [currentPaidExpenses, setCurrentPaidExpense] = useState(null)
+  const [budgetUsedPercent, setBudgetUsedPercent] = useState(null)
 
   const handleSignOut = () => {
       auth.signOut(auth)
@@ -23,14 +30,25 @@ const HomeScreen = ({ navigation }) => {
     console.log(userData)
   }
 
-  const openBudgetModal = () => {
+  const openAddIncomeModal = () => {
+    setIsAddIncomeModal(true)
     setModalVisible(true)
   }
-  const closeBudgetModal = () => {
+  const closeAddIncomeModal = () => {
+    setIsAddIncomeModal(false)
     setModalVisible(false)
   }
 
-  const checkForExtraIncome = (budgetData) => {
+  const openBudgetModal = () => {
+    setIsNewBudgetModal(true)
+    setModalVisible(true)
+  }
+  const closeBudgetModal = () => {
+    setIsNewBudgetModal(false)
+    setModalVisible(false)
+  }
+
+  const setBudgetData = (budgetData) => {
     let date = new Date()
     let month = date.getMonth() + 1;
     let year = date.getFullYear()
@@ -38,26 +56,42 @@ const HomeScreen = ({ navigation }) => {
     console.log(budgetData.additionalIncome.month)
     console.log(budgetData.additionalIncome.year)
     if (budgetData.additionalIncome.month === month && budgetData.additionalIncome.year === year) {
-      setTotalBudgetAmount(budgetData.additionalIncome.amount + budgetData.main)
+      let budgetTotal = budgetData.additionalIncome.amount + budgetData.mainBudget
+      setIsAdditionalIncome(true)
+      setTotalBudgetAmount(budgetTotal)
+      checkBudgetUsedPercent(budgetTotal)
     } else {
-      return setTotalBudgetAmount(budgetData.main)
+      setTotalBudgetAmount(budgetData.mainBudget)
+      checkBudgetUsedPercent(budgetData.mainBudget)
+      return setIsAdditionalIncome(false)
+    }
+  }
+
+  const checkForExpenses = (data) => {
+    return setCurrentPaidExpense(data)
+  } 
+
+  const checkBudgetUsedPercent = (total) => {
+    let percent = (700 / total) * 100
+    return setBudgetUsedPercent(percent)
+  }
+
+  const checkForData = async () => {
+    let docRef = doc(db, "users", auth.currentUser.uid);
+    let docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      let data = docSnap.data()
+      setBudgetData(data)
+      return setUsereData(data)
+    } else {
+      console.log("No such document!");
     }
   }
   
   useEffect(() => {
-    const checkForData = async () => {
-      let docRef = doc(db, "users", auth.currentUser.uid);
-      let docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        let data = docSnap.data()
-        checkForExtraIncome(data.budget)
-        return setUsereData(data)
-      } else {
-        console.log("No such document!");
-      }
-    }
     checkForData()
-  }, [])
+  }, [updateUserData])
+
 
   return (
     <View style={styles.container}>
@@ -72,7 +106,7 @@ const HomeScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       {/* <BudgetCard budget={0} openBudgetModal={openBudgetModal} /> */}
-      {userData ? <BudgetCard budget={totalBudgetAmount} openBudgetModal={openBudgetModal} /> : null}
+      {userData ? <BudgetCard userData={userData} isAdditionalIncome={isAdditionalIncome} budgetUsedPercent={budgetUsedPercent} budget={totalBudgetAmount} openBudgetModal={openBudgetModal} openAddIncomeModal={openAddIncomeModal} /> : null}
       <TouchableOpacity 
         onPress={checkBudget}
       ><Text>Add</Text></TouchableOpacity>
@@ -90,7 +124,8 @@ const HomeScreen = ({ navigation }) => {
         onRequestClose={closeBudgetModal}
         transparent={true}
       >
-        <StartBudgetModal closeBudgetModal={closeBudgetModal} />
+        {isNewBudgetModal ? <StartBudgetModal closeBudgetModal={closeBudgetModal} /> : null}
+        {isAddIncomeModal ? <AddIncomeModal isAdditionalIncome={isAdditionalIncome} userData={userData} closeAddIncomeModal={closeAddIncomeModal} setUpdateUserData={setUpdateUserData} updateUserData={updateUserData}/> : null}
       </Modal>
     </View>
   )

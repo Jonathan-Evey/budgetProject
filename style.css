@@ -1,10 +1,11 @@
 :root {
     -clr--lightest: #EAF1EE;
     -clr--light: #dbe2e0;
+    -clr--mid: #ced4d2;
     -clr--dark: #223252;
     -clr--main: #DE2555;
 
-    --clr-error: "red";
+    -clr--error: #b31515;
 
     -clr--neutral-darkest: #1d1d1d;
 
