@@ -49,7 +49,6 @@ const AddIncomeModal = (props) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.backDrop}></View>
       <View style={styles.incomeFormContainer}>
         <TouchableOpacity onPress={props.closeAddIncomeModal}>
             <Text>Close</Text>
@@ -78,13 +77,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: 'center',
-    },
-    backDrop: {
-        position: "absolute",
-        width: "100%",
-        height: "100%",
-        backgroundColor: "black",
-        opacity: 0.75,
     },
     incomeFormContainer: {
         width: "85%",

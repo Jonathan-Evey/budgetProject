@@ -118,6 +118,14 @@ const HomeScreen = ({ navigation }) => {
         <Text style={styles.buttonText}>Sign Out</Text> 
       </TouchableOpacity>
       <Modal
+        animationType="fade"
+        visible={modalVisible}
+        transparent={true}
+        
+      >
+       <View style={styles.bgModal}></View> 
+      </Modal>
+      <Modal
         style={styles.modal}
         animationType="slide"
         visible={modalVisible}
@@ -186,9 +194,17 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         fontSize: 16,
     },
+    bgModal: {
+      height: "100%",
+      width: "100%",
+      backgroundColor: "black",
+      opacity: 0.85,
+      zIndex: 1,
+    },
     modal:{
       justifyContent: "center",
       alignItems: 'center',
       backgroundColor: "black",
+      zIndex: 2,
     },
 })
