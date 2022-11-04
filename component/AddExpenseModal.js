@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import DayDropDown from './DayDropDown';
+import MonthDropDown from './MonthDropDown';
 
 const AddExpenseModal = props => {
   const [expenseTotal, setExpenseTotal] = useState('');
@@ -15,7 +16,7 @@ const AddExpenseModal = props => {
   const [expenseMonth, setExpenseMonth] = useState(0);
   const [expenseYear, setExpenseYear] = useState(0);
 
-  const [noExpensesAddedError, setnoExpensesAddedError] = useState(false);
+  const [noExpensesAddedError, setNoExpensesAddedError] = useState(false);
 
   const formatExpenseInput = input => {
     if (input.length > 5) {
@@ -79,6 +80,10 @@ const AddExpenseModal = props => {
             expenseYear={expenseYear}
             dropDownDays={dropDownDays}
             setDropDownDays={setDropDownDays}
+          />
+          <MonthDropDown
+            expenseMonth={expenseMonth}
+            setExpenseMonth={setExpenseMonth}
           />
         </View>
         <TouchableOpacity>
