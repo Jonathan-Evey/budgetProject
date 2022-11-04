@@ -14,7 +14,11 @@ const DaysInDropDown = props => {
         .fill(0)
         .map((x, index) => (
           <View key={index} style={styles.day}>
-            <TouchableOpacity onPress={() => props.setExpenseDay(index + 1)}>
+            <TouchableOpacity
+              onPress={() => {
+                props.toggleMenu();
+                props.setExpenseDay(index + 1);
+              }}>
               <Text>{index + 1}</Text>
             </TouchableOpacity>
           </View>

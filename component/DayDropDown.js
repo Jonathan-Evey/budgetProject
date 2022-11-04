@@ -5,7 +5,7 @@ import DaysInDropDown from './DaysInDropDown';
 const DayDropDown = props => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const openMenu = () => {
+  const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
@@ -42,7 +42,7 @@ const DayDropDown = props => {
   return (
     <View>
       <View>
-        <TouchableOpacity onPress={openMenu}>
+        <TouchableOpacity onPress={toggleMenu}>
           <Text>{props.expenseDay}</Text>
           <Text>^</Text>
         </TouchableOpacity>
@@ -51,6 +51,7 @@ const DayDropDown = props => {
         <DaysInDropDown
           dropDownDays={props.dropDownDays}
           setExpenseDay={props.setExpenseDay}
+          toggleMenu={toggleMenu}
         />
       ) : null}
     </View>
