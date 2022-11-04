@@ -8,6 +8,7 @@ import {
 import React, {useState, useEffect} from 'react';
 import DayDropDown from './DayDropDown';
 import MonthDropDown from './MonthDropDown';
+import YearsDropDown from './YearsDropDown';
 
 const AddExpenseModal = props => {
   const [expenseTotal, setExpenseTotal] = useState('');
@@ -84,6 +85,10 @@ const AddExpenseModal = props => {
           <MonthDropDown
             expenseMonth={expenseMonth}
             setExpenseMonth={setExpenseMonth}
+          />
+          <YearsDropDown
+            expenseYear={expenseYear}
+            setExpenseYear={setExpenseYear}
           />
         </View>
         <TouchableOpacity>
