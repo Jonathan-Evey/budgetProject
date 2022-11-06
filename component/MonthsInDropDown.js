@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#DCA387',
   },
   monthText: {
+    fontWeight: 'bold',
     color: '#1d1d1d',
   },
 });

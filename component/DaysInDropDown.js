@@ -42,7 +42,7 @@ const DaysInDropDown = props => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Select the day of the expense</Text>
+      <Text style={styles.title}>Select day of the expense</Text>
       <View style={styles.dayContainer}>
         {Array(props.dropDownDays)
           .fill(0)
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   title: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#1d1d1d',
     paddingTop: 10,
@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#DCA387',
   },
   dayText: {
+    fontWeight: 'bold',
     color: '#1d1d1d',
   },
 });

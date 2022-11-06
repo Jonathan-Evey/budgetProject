@@ -12,6 +12,7 @@ import DaysInDropDown from './DaysInDropDown';
 import MonthDropDown from './MonthDropDown';
 import MonthsInDropDown from './MonthsInDropDown';
 import YearsDropDown from './YearsDropDown';
+import YearsInDropDown from './YearsInDropDown';
 
 const AddExpenseModal = props => {
   const [expenseTotal, setExpenseTotal] = useState('');
@@ -23,6 +24,7 @@ const AddExpenseModal = props => {
   const [expenseMonth, setExpenseMonth] = useState(0);
   const [isMonthSelectorOpen, setIsMonthSelectorOpen] = useState(false);
   const [expenseYear, setExpenseYear] = useState(0);
+  const [isYearSelectorOpen, setIsYearSelectorOpen] = useState(false);
 
   const [noExpensesAddedError, setNoExpensesAddedError] = useState(false);
 
@@ -135,8 +137,17 @@ const AddExpenseModal = props => {
             ) : null}
             <YearsDropDown
               expenseYear={expenseYear}
-              setExpenseYear={setExpenseYear}
+              isYearSelectorOpen={isYearSelectorOpen}
+              setIsYearSelectorOpen={setIsYearSelectorOpen}
             />
+            {isYearSelectorOpen ? (
+              <YearsInDropDown
+                expenseYear={expenseYear}
+                setExpenseYear={setExpenseYear}
+                isYearSelectorOpen={isYearSelectorOpen}
+                setIsYearSelectorOpen={setIsYearSelectorOpen}
+              />
+            ) : null}
           </View>
           <Text style={styles.expenseTitle}>Optional Description</Text>
           <TextInput

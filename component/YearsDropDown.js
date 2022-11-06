@@ -1,31 +1,21 @@
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import YearsInDropDown from './YearsInDropDown';
-import React, {useState} from 'react';
+
+import React from 'react';
 
 const YearsDropDown = props => {
-  const [isOpen, setIsOpen] = useState(false);
-
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
+    props.setIsYearSelectorOpen(!props.isYearSelectorOpen);
   };
+
   return (
     <View style={styles.btnMaxWidth}>
-      <View>
-        <TouchableOpacity
-          style={styles.dateBtn}
-          onPress={() => {
-            toggleMenu();
-          }}>
-          <Text style={styles.dateBtnText}>{props.expenseYear}</Text>
-        </TouchableOpacity>
-      </View>
-      {isOpen ? (
-        <YearsInDropDown
-          expenseYear={props.expenseYear}
-          setExpenseYear={props.setExpenseYear}
-          toggleMenu={toggleMenu}
-        />
-      ) : null}
+      <TouchableOpacity
+        style={styles.dateBtn}
+        onPress={() => {
+          toggleMenu();
+        }}>
+        <Text style={styles.dateBtnText}>{props.expenseYear}</Text>
+      </TouchableOpacity>
     </View>
   );
 };
