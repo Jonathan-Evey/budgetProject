@@ -17,14 +17,18 @@ const DayDropDown = props => {
   };
 
   const setDaysInDropdown = (monthData, yearData) => {
+    console.log(monthData);
     if (match(monthData, thirtyOne)) {
+      console.log('set 31');
       props.setDropDownDays(31);
-    }
-    if (match(monthData, thirty)) {
+    } else if (match(monthData, thirty)) {
+      console.log('set 30');
       props.setDropDownDays(30);
     } else if (leapYear(yearData)) {
+      console.log('set 29');
       props.setDropDownDays(29);
     } else {
+      console.log('set 28');
       props.setDropDownDays(28);
     }
   };
@@ -41,15 +45,17 @@ const DayDropDown = props => {
 
   return (
     <View>
-      <View>
-        <TouchableOpacity onPress={toggleMenu}>
-          <Text>{props.expenseDay}</Text>
-          <Text>^</Text>
+      <View style={{flexDirection: 'row'}}>
+        <Text style={styles.btnLabel}>Day</Text>
+        <TouchableOpacity style={styles.dateBtn} onPress={toggleMenu}>
+          <Text style={styles.dateBtnText}>{props.expenseDay}</Text>
+          <Text style={[styles.dateBtnText, styles.downArrow]}>^</Text>
         </TouchableOpacity>
       </View>
       {isOpen ? (
         <DaysInDropDown
           dropDownDays={props.dropDownDays}
+          expenseDay={props.expenseDay}
           setExpenseDay={props.setExpenseDay}
           toggleMenu={toggleMenu}
         />
@@ -60,4 +66,27 @@ const DayDropDown = props => {
 
 export default DayDropDown;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  btnLabel: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#223252',
+  },
+  dateBtn: {
+    flexDirection: 'row',
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#223252',
+    borderTopWidth: 1,
+    borderTopColor: '#223252',
+  },
+  dateBtnText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#223252',
+  },
+  downArrow: {
+    marginLeft: 15,
+    transform: [{rotate: '180deg'}],
+  },
+});
