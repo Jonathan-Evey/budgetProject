@@ -114,7 +114,7 @@ const SignupScreen = ({navigation}) => {
 
   const setNewUserDb = async userID => {
     await setDoc(doc(db, 'users', userID), {
-      budget: 0,
+      mainBudget: 0,
     })
       .then(() => {
         console.log('data added');

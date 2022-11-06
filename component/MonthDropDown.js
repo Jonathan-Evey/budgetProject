@@ -1,33 +1,39 @@
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import MonthsInDropDown from './MonthsInDropDown';
 import React, {useState} from 'react';
 
 const MonthDropDown = props => {
-  const [isOpen, setIsOpen] = useState(false);
+  const eachMonth = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
 
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
+    props.setIsMonthSelectorOpen(!props.isMonthSelectorOpen);
+  };
+
+  const findMonth = monthNum => {
+    return eachMonth.at(monthNum - 1);
   };
 
   return (
-    <View>
-      <View style={{flexDirection: 'row'}}>
-        <Text>Month</Text>
-        <TouchableOpacity
-          style={styles.dateBtn}
-          onPress={() => {
-            toggleMenu();
-          }}>
-          <Text>{props.expenseMonth}</Text>
-          <Text>^</Text>
-        </TouchableOpacity>
-      </View>
-      {isOpen ? (
-        <MonthsInDropDown
-          setExpenseMonth={props.setExpenseMonth}
-          toggleMenu={toggleMenu}
-        />
-      ) : null}
+    <View style={styles.btnMaxWidth}>
+      <TouchableOpacity
+        style={styles.dateBtn}
+        onPress={() => {
+          toggleMenu();
+        }}>
+        <Text style={styles.dateBtnText}>{findMonth(props.expenseMonth)}</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -35,7 +41,18 @@ const MonthDropDown = props => {
 export default MonthDropDown;
 
 const styles = StyleSheet.create({
+  btnMaxWidth: {
+    width: '30%',
+  },
   dateBtn: {
-    flexDirection: 'row',
+    paddingHorizontal: 20,
+    borderRadius: 250,
+    backgroundColor: '#223252',
+  },
+  dateBtnText: {
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#dbe2e0',
   },
 });

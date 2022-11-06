@@ -9,16 +9,14 @@ const YearsDropDown = props => {
     setIsOpen(!isOpen);
   };
   return (
-    <View>
-      <View style={{flexDirection: 'row'}}>
-        <Text>Year</Text>
+    <View style={styles.btnMaxWidth}>
+      <View>
         <TouchableOpacity
           style={styles.dateBtn}
           onPress={() => {
             toggleMenu();
           }}>
-          <Text>{props.expenseYear}</Text>
-          <Text>^</Text>
+          <Text style={styles.dateBtnText}>{props.expenseYear}</Text>
         </TouchableOpacity>
       </View>
       {isOpen ? (
@@ -35,7 +33,18 @@ const YearsDropDown = props => {
 export default YearsDropDown;
 
 const styles = StyleSheet.create({
+  btnMaxWidth: {
+    width: '35%',
+  },
   dateBtn: {
-    flexDirection: 'row',
+    paddingHorizontal: 20,
+    borderRadius: 250,
+    backgroundColor: '#223252',
+  },
+  dateBtnText: {
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#dbe2e0',
   },
 });

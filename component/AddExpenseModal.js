@@ -8,7 +8,9 @@ import {
 import React, {useState, useEffect} from 'react';
 import CloseBtn from '../utility/CloseBtn';
 import DayDropDown from './DayDropDown';
+import DaysInDropDown from './DaysInDropDown';
 import MonthDropDown from './MonthDropDown';
+import MonthsInDropDown from './MonthsInDropDown';
 import YearsDropDown from './YearsDropDown';
 
 const AddExpenseModal = props => {
@@ -17,7 +19,9 @@ const AddExpenseModal = props => {
   const [expenseDescription, setExpenseDescription] = useState('');
   const [expenseDay, setExpenseDay] = useState(0);
   const [dropDownDays, setDropDownDays] = useState(0);
+  const [isDaySelectorOpen, setIsDaySelectorOpen] = useState(false);
   const [expenseMonth, setExpenseMonth] = useState(0);
+  const [isMonthSelectorOpen, setIsMonthSelectorOpen] = useState(false);
   const [expenseYear, setExpenseYear] = useState(0);
 
   const [noExpensesAddedError, setNoExpensesAddedError] = useState(false);
@@ -101,15 +105,34 @@ const AddExpenseModal = props => {
             <MonthDropDown
               expenseMonth={expenseMonth}
               setExpenseMonth={setExpenseMonth}
+              setIsMonthSelectorOpen={setIsMonthSelectorOpen}
+              isMonthSelectorOpen={isMonthSelectorOpen}
             />
+            {isMonthSelectorOpen ? (
+              <MonthsInDropDown
+                expenseMonth={expenseMonth}
+                setExpenseMonth={setExpenseMonth}
+                setIsMonthSelectorOpen={setIsMonthSelectorOpen}
+                isMonthSelectorOpen={isMonthSelectorOpen}
+              />
+            ) : null}
             <DayDropDown
               expenseDay={expenseDay}
-              setExpenseDay={setExpenseDay}
-              expenseMonth={expenseMonth}
-              expenseYear={expenseYear}
-              dropDownDays={dropDownDays}
-              setDropDownDays={setDropDownDays}
+              isDaySelectorOpen={isDaySelectorOpen}
+              setIsDaySelectorOpen={setIsDaySelectorOpen}
             />
+            {isDaySelectorOpen ? (
+              <DaysInDropDown
+                dropDownDays={dropDownDays}
+                expenseDay={expenseDay}
+                setExpenseDay={setExpenseDay}
+                expenseMonth={expenseMonth}
+                expenseYear={expenseYear}
+                setDropDownDays={setDropDownDays}
+                isDaySelectorOpen={isDaySelectorOpen}
+                setIsDaySelectorOpen={setIsDaySelectorOpen}
+              />
+            ) : null}
             <YearsDropDown
               expenseYear={expenseYear}
               setExpenseYear={setExpenseYear}
@@ -150,7 +173,10 @@ const styles = StyleSheet.create({
     opacity: 1,
   },
   dateContainer: {
+    width: '80%',
+    alignSelf: 'center',
     flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   title: {
     fontSize: 24,

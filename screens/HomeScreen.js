@@ -58,21 +58,27 @@ const HomeScreen = ({navigation}) => {
   };
 
   const setBudgetData = budgetData => {
-    let date = new Date();
-    let month = date.getMonth() + 1;
-    let year = date.getFullYear();
-    console.log(budgetData);
-    console.log(budgetData.additionalIncome.month);
-    console.log(budgetData.additionalIncome.year);
-    if (
-      budgetData.additionalIncome.month === month &&
-      budgetData.additionalIncome.year === year
-    ) {
-      let budgetTotal =
-        budgetData.additionalIncome.amount + budgetData.mainBudget;
-      setIsAdditionalIncome(true);
-      setTotalBudgetAmount(budgetTotal);
-      checkBudgetUsedPercent(budgetTotal);
+    if (budgetData.additionalIncome) {
+      let date = new Date();
+      let month = date.getMonth() + 1;
+      let year = date.getFullYear();
+      console.log(budgetData);
+      console.log(budgetData.additionalIncome.month);
+      console.log(budgetData.additionalIncome.year);
+      if (
+        budgetData.additionalIncome.month === month &&
+        budgetData.additionalIncome.year === year
+      ) {
+        let budgetTotal =
+          budgetData.additionalIncome.amount + budgetData.mainBudget;
+        setIsAdditionalIncome(true);
+        setTotalBudgetAmount(budgetTotal);
+        checkBudgetUsedPercent(budgetTotal);
+      } else {
+        setTotalBudgetAmount(budgetData.mainBudget);
+        checkBudgetUsedPercent(budgetData.mainBudget);
+        return setIsAdditionalIncome(false);
+      }
     } else {
       setTotalBudgetAmount(budgetData.mainBudget);
       checkBudgetUsedPercent(budgetData.mainBudget);
