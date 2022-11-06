@@ -8,6 +8,7 @@ import {
 import React, {useState} from 'react';
 import {doc, updateDoc} from 'firebase/firestore/lite';
 import {auth, db} from '../firebase';
+import CloseBtn from '../utility/CloseBtn';
 
 const AddIncomeModal = props => {
   const [ifAdditionalIncome, setIfAdditionalIncome] = useState(
@@ -65,9 +66,9 @@ const AddIncomeModal = props => {
   return (
     <View style={styles.container}>
       <View style={styles.incomeFormContainer}>
-        <TouchableOpacity onPress={props.closeAddIncomeModal}>
-          <Text>Close</Text>
-        </TouchableOpacity>
+        <View style={styles.flexEnd}>
+          <CloseBtn closeProp={props.closeAddIncomeModal} />
+        </View>
         <Text>Add Extra Income to Budget</Text>
         <View>
           <Text>Amount of extra income for this month's budget</Text>
@@ -115,5 +116,10 @@ const styles = StyleSheet.create({
     height: '90%',
     backgroundColor: '#EAF1EE',
     opacity: 1,
+  },
+  flexEnd: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
 });
