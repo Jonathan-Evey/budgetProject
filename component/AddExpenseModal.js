@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import CloseBtn from '../utility/CloseBtn';
+import ExpenseCategoryContainer from './ExpenseCategoryContainer';
 import DayDropDown from './DayDropDown';
 import DaysInDropDown from './DaysInDropDown';
 import MonthDropDown from './MonthDropDown';
@@ -16,7 +17,7 @@ import YearsInDropDown from './YearsInDropDown';
 
 const AddExpenseModal = props => {
   const [expenseTotal, setExpenseTotal] = useState('');
-  const [expenseCategory, setExpenseCategory] = useState();
+  const [expenseCategory, setExpenseCategory] = useState('');
   const [expenseDescription, setExpenseDescription] = useState('');
   const [expenseDay, setExpenseDay] = useState(0);
   const [dropDownDays, setDropDownDays] = useState(0);
@@ -76,78 +77,78 @@ const AddExpenseModal = props => {
         <View style={styles.flexEnd}>
           <CloseBtn closeProp={props.closeLogExpenseModal} />
         </View>
-        <Text style={styles.title}>Add An Expense</Text>
-        <View style={styles.inputContainer}>
-          <Text style={styles.expenseTitle}>Category</Text>
+        <Text style={styles.title}>Add expense</Text>
+        <Text style={styles.expenseTitle}>Amount</Text>
+        <View style={{flexDirection: 'row', paddingLeft: 35, paddingRight: 50}}>
+          <Text style={styles.expenseInputText}>$</Text>
           <TextInput
-            value={expenseDescription}
+            style={styles.expenseAmountInput}
+            placeholder="0.00"
+            keyboardType="numeric"
+            value={expenseTotal}
             textAlign="right"
-            onChangeText={text => setExpenseDescription(text)}
+            onChangeText={text =>
+              formatExpenseInput(text.replace(/[^0-9]/g, ''))
+            }
           />
-          <Text style={styles.expenseTitle}>Amount</Text>
-          <View
-            style={{flexDirection: 'row', paddingLeft: 35, paddingRight: 50}}>
-            <Text style={styles.expenseInputText}>$</Text>
-            <TextInput
-              style={styles.expenseAmountInput}
-              placeholder="0.00"
-              keyboardType="numeric"
-              value={expenseTotal}
-              textAlign="right"
-              onChangeText={text =>
-                formatExpenseInput(text.replace(/[^0-9]/g, ''))
-              }
-            />
-          </View>
-          {noExpensesAddedError ? (
-            <Text>Please add the amount of extra income for this month</Text>
-          ) : null}
-          <Text style={styles.expenseTitle}>Date</Text>
-          <View style={styles.dateContainer}>
-            <MonthDropDown
+        </View>
+        {noExpensesAddedError ? (
+          <Text>Please add the amount of extra income for this month</Text>
+        ) : null}
+        <Text style={styles.expenseTitle}>Date</Text>
+        <View style={styles.dateContainer}>
+          <MonthDropDown
+            expenseMonth={expenseMonth}
+            setExpenseMonth={setExpenseMonth}
+            setIsMonthSelectorOpen={setIsMonthSelectorOpen}
+            isMonthSelectorOpen={isMonthSelectorOpen}
+          />
+          {isMonthSelectorOpen ? (
+            <MonthsInDropDown
               expenseMonth={expenseMonth}
               setExpenseMonth={setExpenseMonth}
               setIsMonthSelectorOpen={setIsMonthSelectorOpen}
               isMonthSelectorOpen={isMonthSelectorOpen}
             />
-            {isMonthSelectorOpen ? (
-              <MonthsInDropDown
-                expenseMonth={expenseMonth}
-                setExpenseMonth={setExpenseMonth}
-                setIsMonthSelectorOpen={setIsMonthSelectorOpen}
-                isMonthSelectorOpen={isMonthSelectorOpen}
-              />
-            ) : null}
-            <DayDropDown
+          ) : null}
+          <DayDropDown
+            expenseDay={expenseDay}
+            isDaySelectorOpen={isDaySelectorOpen}
+            setIsDaySelectorOpen={setIsDaySelectorOpen}
+          />
+          {isDaySelectorOpen ? (
+            <DaysInDropDown
+              dropDownDays={dropDownDays}
               expenseDay={expenseDay}
+              setExpenseDay={setExpenseDay}
+              expenseMonth={expenseMonth}
+              expenseYear={expenseYear}
+              setDropDownDays={setDropDownDays}
               isDaySelectorOpen={isDaySelectorOpen}
               setIsDaySelectorOpen={setIsDaySelectorOpen}
             />
-            {isDaySelectorOpen ? (
-              <DaysInDropDown
-                dropDownDays={dropDownDays}
-                expenseDay={expenseDay}
-                setExpenseDay={setExpenseDay}
-                expenseMonth={expenseMonth}
-                expenseYear={expenseYear}
-                setDropDownDays={setDropDownDays}
-                isDaySelectorOpen={isDaySelectorOpen}
-                setIsDaySelectorOpen={setIsDaySelectorOpen}
-              />
-            ) : null}
-            <YearsDropDown
+          ) : null}
+          <YearsDropDown
+            expenseYear={expenseYear}
+            isYearSelectorOpen={isYearSelectorOpen}
+            setIsYearSelectorOpen={setIsYearSelectorOpen}
+          />
+          {isYearSelectorOpen ? (
+            <YearsInDropDown
               expenseYear={expenseYear}
+              setExpenseYear={setExpenseYear}
               isYearSelectorOpen={isYearSelectorOpen}
               setIsYearSelectorOpen={setIsYearSelectorOpen}
             />
-            {isYearSelectorOpen ? (
-              <YearsInDropDown
-                expenseYear={expenseYear}
-                setExpenseYear={setExpenseYear}
-                isYearSelectorOpen={isYearSelectorOpen}
-                setIsYearSelectorOpen={setIsYearSelectorOpen}
-              />
-            ) : null}
+          ) : null}
+        </View>
+        <View>
+          <Text style={styles.expenseTitle}>Category</Text>
+          <View style={styles.categoryContainer}>
+            <ExpenseCategoryContainer
+              expenseCategory={expenseCategory}
+              setExpenseCategory={setExpenseCategory}
+            />
           </View>
           <Text style={styles.expenseTitle}>Optional Description</Text>
           <TextInput
@@ -157,7 +158,7 @@ const AddExpenseModal = props => {
           />
         </View>
         <TouchableOpacity>
-          <Text>Save Budget</Text>
+          <Text>Save to Expenses</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -171,6 +172,9 @@ const styles = StyleSheet.create({
     position: 'relative',
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  categoryContainer: {
     alignItems: 'center',
   },
   incomeFormContainer: {
@@ -193,11 +197,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     width: '75%',
-    color: '#223252',
+    color: '#1d1d1d',
     transform: [{translateY: -15}],
   },
   expenseTitle: {
-    color: '#223252',
+    color: '#1d1d1d',
     fontSize: 18,
     fontWeight: 'bold',
     marginHorizontal: 5,
