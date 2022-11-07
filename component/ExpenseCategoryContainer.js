@@ -8,17 +8,15 @@ const ExpenseCategoryContainer = props => {
 
   let eachCategory = [
     'Bills',
-    'Eat Out',
+    'Restaurants',
     'Entertainment',
     'Groceries',
     'Healthcare',
     'Housing',
     'Insurance',
-    'Misc',
+    'Misc.',
     'Recreation',
-
     'Saving',
-
     'Transportation',
     'Utilities',
   ];
