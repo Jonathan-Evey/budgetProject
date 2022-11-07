@@ -27,7 +27,8 @@ const AddExpenseModal = props => {
   const [expenseYear, setExpenseYear] = useState(0);
   const [isYearSelectorOpen, setIsYearSelectorOpen] = useState(false);
 
-  const [noExpensesAddedError, setNoExpensesAddedError] = useState(false);
+  const [noExpenseAddedError, setNoExpenseAddedError] = useState(false);
+  const [noCategorySelected, setNoCategorySelected] = useState(false);
 
   const formatExpenseInput = input => {
     if (input.length > 8) {
@@ -67,6 +68,26 @@ const AddExpenseModal = props => {
     setExpenseYear(year);
   };
 
+  const validatData = () => {
+    if (expenseTotal === '') {
+      return setNoExpenseAddedError(true);
+    }
+    if (expenseCategory === '') {
+      return setNoCategorySelected(true);
+    }
+    if (expenseTotal !== '' && expenseCategory !== '') {
+      props.saveExpense(
+        expenseTotal,
+        expenseMonth,
+        expenseDay,
+        expenseYear,
+        expenseCategory,
+        expenseDescription,
+      );
+      return props.closeLogExpenseModal();
+    }
+  };
+
   useEffect(() => {
     setCurrentDates();
   }, []);
@@ -77,9 +98,15 @@ const AddExpenseModal = props => {
         <View style={styles.flexEnd}>
           <CloseBtn closeProp={props.closeLogExpenseModal} />
         </View>
-        <Text style={styles.title}>Add expense</Text>
+        <Text style={styles.title}>Expense</Text>
         <Text style={styles.expenseTitle}>Amount</Text>
-        <View style={{flexDirection: 'row', paddingLeft: 35, paddingRight: 50}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            paddingLeft: 35,
+            paddingRight: 50,
+            marginBottom: 15,
+          }}>
           <Text style={styles.expenseInputText}>$</Text>
           <TextInput
             style={styles.expenseAmountInput}
@@ -92,8 +119,8 @@ const AddExpenseModal = props => {
             }
           />
         </View>
-        {noExpensesAddedError ? (
-          <Text>Please add the amount of extra income for this month</Text>
+        {noExpenseAddedError ? (
+          <Text style={styles.errorText}>Please add an expense amount</Text>
         ) : null}
         <Text style={styles.expenseTitle}>Date</Text>
         <View style={styles.dateContainer}>
@@ -143,12 +170,17 @@ const AddExpenseModal = props => {
           ) : null}
         </View>
         <View>
-          <Text style={styles.expenseTitle}>Category</Text>
+          <Text style={[styles.expenseTitle, {marginBottom: 10}]}>
+            Category
+          </Text>
           <View style={styles.categoryContainer}>
             <ExpenseCategoryContainer
               expenseCategory={expenseCategory}
               setExpenseCategory={setExpenseCategory}
             />
+            {noCategorySelected ? (
+              <Text style={styles.errorText}>Please add an expense amount</Text>
+            ) : null}
           </View>
           <Text style={styles.expenseTitle}>Optional Description</Text>
           <TextInput
@@ -157,9 +189,15 @@ const AddExpenseModal = props => {
             onChangeText={text => setExpenseDescription(text)}
           />
         </View>
-        <TouchableOpacity>
-          <Text>Save to Expenses</Text>
-        </TouchableOpacity>
+        <View style={styles.saveBtnContainer}>
+          <TouchableOpacity
+            style={styles.saveBtn}
+            onPress={() => {
+              validatData();
+            }}>
+            <Text style={styles.saveBtnText}>Save Expense</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -171,16 +209,17 @@ const styles = StyleSheet.create({
   container: {
     position: 'relative',
     flex: 1,
-    justifyContent: 'center',
+    paddingTop: '7.5%',
     alignItems: 'center',
   },
   categoryContainer: {
     alignItems: 'center',
+    marginBottom: 15,
   },
   incomeFormContainer: {
     width: '85%',
-    height: '90%',
     padding: 15,
+    paddingTop: 5,
     backgroundColor: '#dbe2e0',
     borderRadius: 25,
     borderColor: '#223252',
@@ -192,11 +231,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 15,
   },
   title: {
+    textAlign: 'center',
     fontSize: 24,
     fontWeight: 'bold',
-    width: '75%',
     color: '#1d1d1d',
     transform: [{translateY: -15}],
   },
@@ -239,5 +279,27 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'flex-end',
+  },
+  saveBtnContainer: {
+    alignItems: 'center',
+  },
+  saveBtn: {
+    width: '50%',
+    backgroundColor: '#DE2555',
+    borderRadius: 250,
+    paddingVertical: 5,
+    marginTop: 15,
+    marginBottom: 5,
+  },
+  saveBtnText: {
+    color: '#1d1d1d',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  errorText: {
+    position: 'absolute',
+    bottom: 0,
+    color: '#b31515',
   },
 });
