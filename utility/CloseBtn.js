@@ -14,8 +14,10 @@ export default CloseBtn;
 
 const styles = StyleSheet.create({
   closeBtn: {
-    marginTop: 5,
+    marginTop: 15,
     width: 25,
+    height: 25,
+    zIndex: 100,
   },
   bar: {
     height: 4,
