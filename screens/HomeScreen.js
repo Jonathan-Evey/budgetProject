@@ -1,6 +1,12 @@
 import {StyleSheet, Modal, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {doc, getDoc} from 'firebase/firestore/lite';
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  arrayUnion,
+  setDoc,
+} from 'firebase/firestore/lite';
 import {auth, db} from '../firebase';
 import MainNav from '../component/MainNav';
 import BudgetCard from '../component/BudgetCard';
@@ -15,6 +21,8 @@ const HomeScreen = ({navigation}) => {
   const [isAdditionalIncome, setIsAdditionalIncome] = useState(false);
   const [currentPaidExpenses, setCurrentPaidExpense] = useState(null);
   const [budgetUsedPercent, setBudgetUsedPercent] = useState(null);
+  const [spentPercent, setSpentPercent] = useState(null);
+  const [spentOverBudget, setSpentOverBudget] = useState(null);
 
   //-----------------main nav state----------------------//
   const [isMainNavOpen, setIsMainNavOpen] = useState(false);
@@ -58,10 +66,15 @@ const HomeScreen = ({navigation}) => {
   };
 
   const setBudgetData = budgetData => {
+    let date = new Date();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    let currentMonthExpenseData = checkForCurrentMonthExpenses(
+      budgetData,
+      month,
+      year,
+    );
     if (budgetData.additionalIncome) {
-      let date = new Date();
-      let month = date.getMonth() + 1;
-      let year = date.getFullYear();
       console.log(budgetData);
       console.log(budgetData.additionalIncome.month);
       console.log(budgetData.additionalIncome.year);
@@ -73,25 +86,41 @@ const HomeScreen = ({navigation}) => {
           budgetData.additionalIncome.amount + budgetData.mainBudget;
         setIsAdditionalIncome(true);
         setTotalBudgetAmount(budgetTotal);
-        checkBudgetUsedPercent(budgetTotal);
+        checkBudgetUsedPercent(budgetTotal, currentMonthExpenseData);
       } else {
         setTotalBudgetAmount(budgetData.mainBudget);
-        checkBudgetUsedPercent(budgetData.mainBudget);
+        checkBudgetUsedPercent(budgetData.mainBudget, currentMonthExpenseData);
         return setIsAdditionalIncome(false);
       }
     } else {
       setTotalBudgetAmount(budgetData.mainBudget);
-      checkBudgetUsedPercent(budgetData.mainBudget);
+      checkBudgetUsedPercent(budgetData.mainBudget, currentMonthExpenseData);
       return setIsAdditionalIncome(false);
     }
   };
 
-  const checkForExpenses = data => {
-    return setCurrentPaidExpense(data);
+  const checkForCurrentMonthExpenses = (data, month, year) => {
+    if (objKeyValues(data.expenses, `${year}`)) {
+      if (objKeyValues(data.expenses[year], `${month}`)) {
+        let total = 0;
+        data.expenses[year][month].map(each => {
+          total = total + Number(each.expenseAmount.replace(/,/g, ''));
+          console.log(total);
+        });
+        setCurrentPaidExpense(total);
+        return total;
+      }
+    }
+    setCurrentPaidExpense(0);
+    return 0;
   };
 
-  const checkBudgetUsedPercent = total => {
-    let percent = (700 / total) * 100;
+  const checkBudgetUsedPercent = (total, expenses) => {
+    let percent = (expenses / total) * 100;
+    let spentPercent = (expenses / total) * 100;
+    let amountOverBudget = expenses - total;
+    setSpentOverBudget(amountOverBudget);
+    setSpentPercent(spentPercent);
     return setBudgetUsedPercent(percent);
   };
 
@@ -101,10 +130,77 @@ const HomeScreen = ({navigation}) => {
     if (docSnap.exists()) {
       let data = docSnap.data();
       setBudgetData(data);
+      console.log('data updated');
       return setUsereData(data);
     } else {
       console.log('No such document!');
     }
+  };
+
+  const objKeyValues = (obj, value) => {
+    console.log(obj, value);
+    return Object.keys(obj).find(key => key === value);
+  };
+
+  const formatExpenceObj = (monthData, yearData, newObj) => {
+    if (objKeyValues(userData.expenses, `${yearData}`)) {
+      if (objKeyValues(userData.expenses[yearData], `${monthData}`)) {
+        let currentData = userData.expenses;
+        let currentYearData = userData.expenses[yearData];
+        let currentMonthData = userData.expenses[yearData][monthData];
+        return {
+          ...currentData,
+          [yearData]: {
+            ...currentYearData,
+            [monthData]: [newObj, ...currentMonthData],
+          },
+        };
+      } else {
+        let currentData = userData.expenses;
+        let currentYearData = userData.expenses[yearData];
+        return {
+          ...currentData,
+          [yearData]: {...currentYearData, [monthData]: [newObj]},
+        };
+      }
+    } else {
+      let currentData = userData.expenses;
+      let newMonthData = {[monthData]: [newObj]};
+      return {...currentData, [yearData]: newMonthData};
+    }
+  };
+
+  const saveExpense = async (
+    amountData,
+    monthData,
+    dayData,
+    yearData,
+    category,
+    descriptionData,
+  ) => {
+    let fullDate = `${monthData}${dayData}${yearData}`;
+    let newObj = {
+      date: Number(fullDate),
+      expenseAmount: amountData,
+      expenseName: category,
+      description: descriptionData,
+    };
+    let newExpenceObj = formatExpenceObj(monthData, yearData, newObj);
+
+    await setDoc(
+      doc(db, 'users', auth.currentUser.uid),
+      {
+        expenses: newExpenceObj,
+      },
+      {merge: true},
+    )
+      .then(() => {
+        setUpdateUserData(!updateUserData);
+        console.log('data added');
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   const backToLanding = () => {
@@ -135,7 +231,10 @@ const HomeScreen = ({navigation}) => {
           userData={userData}
           isAdditionalIncome={isAdditionalIncome}
           budgetUsedPercent={budgetUsedPercent}
+          spentPercent={spentPercent}
+          spentOverBudget={spentOverBudget}
           budget={totalBudgetAmount}
+          currentPaidExpenses={currentPaidExpenses}
           openBudgetModal={openBudgetModal}
           openLogExpenseModal={openLogExpenseModal}
           openAddIncomeModal={openAddIncomeModal}
@@ -159,6 +258,7 @@ const HomeScreen = ({navigation}) => {
         ) : null}
         {isLogExpenseModal ? (
           <AddExpenseModal
+            saveExpense={saveExpense}
             closeLogExpenseModal={closeLogExpenseModal}
             setUpdateUserData={setUpdateUserData}
             updateUserData={updateUserData}
@@ -230,9 +330,7 @@ const styles = StyleSheet.create({
     zIndex: 5,
   },
   modal: {
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'black',
     zIndex: 6,
   },
 });
