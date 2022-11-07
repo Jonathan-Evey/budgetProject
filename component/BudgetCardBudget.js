@@ -34,7 +34,7 @@ const BudgetCardBudget = props => {
               <Text
                 style={{
                   color: '#b31515',
-                }}>{`Used ${props.budgetUsedPercent}%`}</Text>
+                }}>{`Used ${props.budgetUsedPercent.toFixed()}%`}</Text>
             )}
           </View>
           <Text style={styles.budgetTotal}>{props.budget}</Text>

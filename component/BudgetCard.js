@@ -10,17 +10,10 @@ const BudgetCard = props => {
   };
 
   const [isSeeDetails, setIsSeeDeatils] = useState(false);
-  const [spentPercent, setSpentPercent] = useState();
-  const [spentOverBudget, setSpentOverBudget] = useState();
 
   const openBudget = () => {
     setIsSeeDeatils(!isSeeDetails);
   };
-
-  useEffect(() => {
-    setSpentOverBudget(200 - props.budget);
-    setSpentPercent((200 / props.budget) * 100);
-  }, []);
 
   return (
     <>
@@ -39,7 +32,7 @@ const BudgetCard = props => {
           <BudgetCardBudget
             userData={props.userData}
             budget={props.budget}
-            budgetSpent={700}
+            budgetSpent={props.currentPaidExpenses}
             budgetUsedPercent={props.budgetUsedPercent}
             componentType={componentType.budget}
             isSeeDetails={isSeeDetails}
@@ -47,9 +40,10 @@ const BudgetCard = props => {
           />
           {isSeeDetails ? (
             <BudgetCardSpent
-              spent={400}
-              spentOverBudget={spentOverBudget}
-              spentPercent={spentPercent}
+              budget={props.budget}
+              spent={props.currentPaidExpenses}
+              spentOverBudget={props.spentOverBudget}
+              spentPercent={props.spentPercent}
               componentType={componentType.spent}
               openLogExpenseModal={props.openLogExpenseModal}
             />

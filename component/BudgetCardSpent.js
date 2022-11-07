@@ -12,7 +12,9 @@ const BudgetCardSpent = props => {
               <Text
                 style={{
                   color: '#b31515',
-                }}>{`You are ${props.spentOverBudget} over budget`}</Text>
+                }}>{`You are ${props.spentOverBudget.toFixed(
+                2,
+              )} over budget`}</Text>
             ) : null}
           </View>
           <Text style={[styles.budgetTotal]}>{props.spent}</Text>
