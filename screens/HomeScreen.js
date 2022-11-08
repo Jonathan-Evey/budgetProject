@@ -75,9 +75,6 @@ const HomeScreen = ({navigation}) => {
       year,
     );
     if (budgetData.additionalIncome) {
-      console.log(budgetData);
-      console.log(budgetData.additionalIncome.month);
-      console.log(budgetData.additionalIncome.year);
       if (
         budgetData.additionalIncome.month === month &&
         budgetData.additionalIncome.year === year
@@ -100,15 +97,16 @@ const HomeScreen = ({navigation}) => {
   };
 
   const checkForCurrentMonthExpenses = (data, month, year) => {
-    if (objKeyValues(data.expenses, `${year}`)) {
-      if (objKeyValues(data.expenses[year], `${month}`)) {
-        let total = 0;
-        data.expenses[year][month].map(each => {
-          total = total + Number(each.expenseAmount.replace(/,/g, ''));
-          console.log(total);
-        });
-        setCurrentPaidExpense(total);
-        return total;
+    if (data.expenses) {
+      if (objKeyValues(data.expenses, `${year}`)) {
+        if (objKeyValues(data.expenses[year], `${month}`)) {
+          let total = 0;
+          data.expenses[year][month].map(each => {
+            total = total + Number(each.expenseAmount.replace(/,/g, ''));
+          });
+          setCurrentPaidExpense(total);
+          return total;
+        }
       }
     }
     setCurrentPaidExpense(0);
@@ -138,35 +136,39 @@ const HomeScreen = ({navigation}) => {
   };
 
   const objKeyValues = (obj, value) => {
-    console.log(obj, value);
     return Object.keys(obj).find(key => key === value);
   };
 
   const formatExpenceObj = (monthData, yearData, newObj) => {
-    if (objKeyValues(userData.expenses, `${yearData}`)) {
-      if (objKeyValues(userData.expenses[yearData], `${monthData}`)) {
-        let currentData = userData.expenses;
-        let currentYearData = userData.expenses[yearData];
-        let currentMonthData = userData.expenses[yearData][monthData];
-        return {
-          ...currentData,
-          [yearData]: {
-            ...currentYearData,
-            [monthData]: [newObj, ...currentMonthData],
-          },
-        };
+    if (userData.expenses) {
+      if (objKeyValues(userData.expenses, `${yearData}`)) {
+        if (objKeyValues(userData.expenses[yearData], `${monthData}`)) {
+          let currentData = userData.expenses;
+          let currentYearData = userData.expenses[yearData];
+          let currentMonthData = userData.expenses[yearData][monthData];
+          return {
+            ...currentData,
+            [yearData]: {
+              ...currentYearData,
+              [monthData]: [newObj, ...currentMonthData],
+            },
+          };
+        } else {
+          let currentData = userData.expenses;
+          let currentYearData = userData.expenses[yearData];
+          return {
+            ...currentData,
+            [yearData]: {...currentYearData, [monthData]: [newObj]},
+          };
+        }
       } else {
         let currentData = userData.expenses;
-        let currentYearData = userData.expenses[yearData];
-        return {
-          ...currentData,
-          [yearData]: {...currentYearData, [monthData]: [newObj]},
-        };
+        let newMonthData = {[monthData]: [newObj]};
+        return {...currentData, [yearData]: newMonthData};
       }
     } else {
-      let currentData = userData.expenses;
       let newMonthData = {[monthData]: [newObj]};
-      return {...currentData, [yearData]: newMonthData};
+      return {[yearData]: newMonthData};
     }
   };
 
