@@ -9,10 +9,10 @@ import {
 } from 'firebase/firestore/lite';
 import {auth, db} from '../firebase';
 import MainNav from '../component/MainNav';
-import BudgetCard from '../component/BudgetCard';
-import StartBudgetModal from '../component/StartBudgetModal';
-import AddIncomeModal from '../component/AddIncomeModal';
-import AddExpenseModal from '../component/AddExpenseModal';
+import BudgetCard from '../component/homeScreen/BudgetCard';
+import StartBudgetModal from '../component/modals/StartBudgetModal';
+import AddIncomeModal from '../component/modals/AddIncomeModal';
+import AddExpenseModal from '../component/modals/AddExpenseModal';
 
 const HomeScreen = ({navigation}) => {
   const [userData, setUsereData] = useState(null);

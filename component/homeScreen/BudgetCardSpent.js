@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import ToExpensesBtn from '../utility/ToExpensesBtn';
+import ToExpensesBtn from '../../utility/ToExpensesBtn';
 import React from 'react';
 
 const BudgetCardSpent = props => {

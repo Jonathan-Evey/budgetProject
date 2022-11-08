@@ -7,8 +7,8 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {doc, setDoc} from 'firebase/firestore/lite';
-import AddBillConponent from './AddBillConponent';
-import {auth, db} from '../firebase';
+import AddBillConponent from '../AddBillConponent';
+import {auth, db} from '../../firebase';
 
 const StartBudgetModal = props => {
   const [mainBudget, setMainBudget] = useState('');

@@ -6,14 +6,14 @@ import {
   TextInput,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
-import CloseBtn from '../utility/CloseBtn';
+import CloseBtn from '../../utility/CloseBtn';
 import ExpenseCategoryContainer from './ExpenseCategoryContainer';
-import DayDropDown from './DayDropDown';
-import DaysInDropDown from './DaysInDropDown';
-import MonthDropDown from './MonthDropDown';
-import MonthsInDropDown from './MonthsInDropDown';
-import YearsDropDown from './YearsDropDown';
-import YearsInDropDown from './YearsInDropDown';
+import DayDropDown from './selectorComponent/DayDropDown';
+import DaysInDropDown from './selectorComponent/DaysInDropDown';
+import MonthDropDown from './selectorComponent/MonthDropDown';
+import MonthsInDropDown from './selectorComponent/MonthsInDropDown';
+import YearsDropDown from './selectorComponent/YearsDropDown';
+import YearsInDropDown from './selectorComponent/YearsInDropDown';
 
 const AddExpenseModal = props => {
   const [expenseTotal, setExpenseTotal] = useState('');

@@ -7,8 +7,8 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import {doc, updateDoc} from 'firebase/firestore/lite';
-import {auth, db} from '../firebase';
-import CloseBtn from '../utility/CloseBtn';
+import {auth, db} from '../../firebase';
+import CloseBtn from '../../utility/CloseBtn';
 
 const AddIncomeModal = props => {
   const [ifAdditionalIncome, setIfAdditionalIncome] = useState(

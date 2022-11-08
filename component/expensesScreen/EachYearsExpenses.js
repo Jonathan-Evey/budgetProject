@@ -1,0 +1,71 @@
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  SafeAreaView,
+  FlatList,
+  Animated,
+  LayoutAnimation,
+  UIManager,
+} from 'react-native';
+import React, {useState, useRef, useEffect} from 'react';
+import EachMonthsExpenses from './EachMonthsExpenses';
+
+if (Platform.OS === 'android') {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+}
+
+const EachYearsExpenses = ({data, userData}) => {
+  const [isShowMonths, setIsShowMonths] = useState(false);
+  const toggleMonthsShown = useRef(new Animated.Value(0)).current;
+
+  const toggleMonths = () => {
+    Animated.timing(toggleMonthsShown, {
+      toValue: isShowMonths ? 1 : 0,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  useEffect(() => {
+    toggleMonths();
+  }, [isShowMonths]);
+
+  return (
+    <SafeAreaView style={{overflow: 'hidden'}}>
+      <TouchableOpacity
+        onPress={() => {
+          LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+          setIsShowMonths(!isShowMonths);
+        }}>
+        <Text>{data.year}</Text>
+      </TouchableOpacity>
+      {isShowMonths && (
+        <Animated.View
+          style={{
+            opacity: toggleMonthsShown,
+            zIndex: 0,
+          }}>
+          <FlatList
+            data={data.months}
+            renderItem={({item}) => (
+              <EachMonthsExpenses
+                data={item}
+                userData={userData}
+                year={data.year}
+              />
+            )}
+            keyExtractor={(item, index) => index}
+          />
+        </Animated.View>
+      )}
+    </SafeAreaView>
+  );
+};
+
+export default EachYearsExpenses;
+
+const styles = StyleSheet.create({});
