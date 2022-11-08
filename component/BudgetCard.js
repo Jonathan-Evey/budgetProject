@@ -40,6 +40,7 @@ const BudgetCard = props => {
           />
           {isSeeDetails ? (
             <BudgetCardSpent
+              userData={props.userData}
               budget={props.budget}
               spent={props.currentPaidExpenses}
               spentOverBudget={props.spentOverBudget}

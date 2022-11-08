@@ -1,4 +1,5 @@
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import ToExpensesBtn from '../utility/ToExpensesBtn';
 import React from 'react';
 
 const BudgetCardSpent = props => {
@@ -42,9 +43,7 @@ const BudgetCardSpent = props => {
           onPress={props.openLogExpenseModal}>
           <Text style={styles.btnText}>Log Expense</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btn}>
-          <Text style={styles.btnText}>Full Details</Text>
-        </TouchableOpacity>
+        <ToExpensesBtn userData={props.userData} />
       </View>
     </>
   );
