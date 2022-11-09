@@ -35,10 +35,13 @@ const BudgetCardSpent = props => {
               <Text
                 style={{
                   color: '#b31515',
-                }}>{`You are ${props.spentOverBudget.toFixed(
-                2,
-              )} over budget`}</Text>
-            ) : null}
+                }}>{`${props.spentOverBudget.toFixed(2)} over budget`}</Text>
+            ) : (
+              <Text
+                style={{
+                  color: '#223252',
+                }}>{`Used ${props.spentPercent.toFixed()}% of budget`}</Text>
+            )}
           </View>
           <Text style={[styles.budgetTotal]}>{spentAmount}</Text>
         </View>
@@ -88,7 +91,7 @@ const styles = StyleSheet.create({
   },
   budgetTitle: {
     fontSize: 24,
-    paddingBottom: 5,
+
     color: '#223252',
   },
   budgetTotal: {

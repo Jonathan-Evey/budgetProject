@@ -22,19 +22,24 @@ const BudgetCardBudget = props => {
   // let budgetTotal = calculateBudgetTotal()
 
   const formatBudgetRemaining = () => {
-    let amountRemaining = (props.budget - props.budgetSpent).toFixed();
-    if (amountRemaining.length > 3) {
+    let amountRemaining = (props.budget - props.budgetSpent)
+      .toString()
+      .replace(/[^0-9]/g, '');
+    if (amountRemaining.length > 5) {
       return setRemainingAmount(
         `$${amountRemaining.slice(
           0,
-          amountRemaining.length - 3,
+          amountRemaining.length - 5,
         )},${amountRemaining.slice(
-          amountRemaining.length - 3,
+          amountRemaining.length - 5,
+          amountRemaining.length - 2,
+        )}.${amountRemaining.slice(
+          amountRemaining.length - 2,
           amountRemaining.length,
         )}`,
       );
     } else {
-      return setRemainingAmount(`$${amountRemaining}`);
+      return setRemainingAmount(`$${props.budget - props.budgetSpent}`);
     }
   };
 
@@ -48,17 +53,14 @@ const BudgetCardBudget = props => {
         <View style={styles.budgetDetailsTextContainer}>
           <View style={styles.budgetDetailsTextContainerLeft}>
             <Text style={styles.budgetTitle}>Remaining</Text>
-            {props.budgetUsedPercent < 100 ? (
-              <Text
-                style={{
-                  color: '#223252',
-                }}>{`Used ${props.budgetUsedPercent.toFixed()}%`}</Text>
-            ) : (
+            {props.budgetUsedPercent > 100 ? (
               <Text
                 style={{
                   color: '#b31515',
-                }}>{`Used ${props.budgetUsedPercent.toFixed()}%`}</Text>
-            )}
+                }}>{`Over budget by ${
+                props.budgetUsedPercent.toFixed() - 100
+              }%`}</Text>
+            ) : null}
           </View>
           <Text style={styles.budgetTotal}>{remainingAmount}</Text>
         </View>
