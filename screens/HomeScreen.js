@@ -1,14 +1,9 @@
 import {StyleSheet, Modal, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {
-  doc,
-  getDoc,
-  updateDoc,
-  arrayUnion,
-  setDoc,
-} from 'firebase/firestore/lite';
+import {doc, getDoc, setDoc} from 'firebase/firestore/lite';
 import {auth, db} from '../firebase';
 import MainNav from '../component/MainNav';
+import MainNavBtn from '../utility/MainNavBtn';
 import BudgetCard from '../component/homeScreen/BudgetCard';
 import StartBudgetModal from '../component/modals/StartBudgetModal';
 import AddIncomeModal from '../component/modals/AddIncomeModal';
@@ -217,15 +212,10 @@ const HomeScreen = ({navigation}) => {
     <View style={styles.container}>
       <View style={styles.userNav}>
         <Text style={styles.userName}>Allotment</Text>
-        <TouchableOpacity
-          style={styles.userMainMenu}
-          onPress={() => {
-            setIsMainNavOpen(!isMainNavOpen);
-          }}>
-          <View style={[styles.bar, styles.midBar]}></View>
-          <View style={[styles.bar, styles.longBar]}></View>
-          <View style={[styles.bar, styles.shortBar]}></View>
-        </TouchableOpacity>
+        <MainNavBtn
+          setIsMainNavOpen={setIsMainNavOpen}
+          isMainNavOpen={isMainNavOpen}
+        />
       </View>
       {/* <BudgetCard budget={0} openBudgetModal={openBudgetModal} /> */}
       {userData ? (
@@ -242,7 +232,11 @@ const HomeScreen = ({navigation}) => {
           openAddIncomeModal={openAddIncomeModal}
         />
       ) : null}
-      <TouchableOpacity onPress={checkBudget}>
+      <TouchableOpacity
+        onPress={() => {
+          checkBudget();
+          setIsMainNavOpen(false);
+        }}>
         <Text>Add</Text>
       </TouchableOpacity>
 
@@ -296,28 +290,6 @@ const styles = StyleSheet.create({
     height: '10%',
     width: '100%',
     paddingHorizontal: 25,
-  },
-  userMainMenu: {
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
-    alignItems: 'flex-end',
-    height: 50,
-    width: 50,
-    zIndex: 4,
-  },
-  bar: {
-    height: 4,
-    backgroundColor: '#DE2555',
-    borderRadius: 250,
-  },
-  shortBar: {
-    width: '55%',
-  },
-  midBar: {
-    width: '75%',
-  },
-  longBar: {
-    width: '95%',
   },
   userName: {
     color: '#223252',
