@@ -3,20 +3,12 @@ import {
   Text,
   View,
   TouchableOpacity,
-  SafeAreaView,
   FlatList,
   Animated,
   LayoutAnimation,
-  UIManager,
 } from 'react-native';
 import React, {useState, useRef, useEffect} from 'react';
 import EachMonthsExpenses from './EachMonthsExpenses';
-
-if (Platform.OS === 'android') {
-  if (UIManager.setLayoutAnimationEnabledExperimental) {
-    UIManager.setLayoutAnimationEnabledExperimental(true);
-  }
-}
 
 const EachYearsExpenses = ({data, userData}) => {
   const [isShowMonths, setIsShowMonths] = useState(false);
@@ -35,7 +27,7 @@ const EachYearsExpenses = ({data, userData}) => {
   }, [isShowMonths]);
 
   return (
-    <SafeAreaView style={{overflow: 'hidden'}}>
+    <View style={{overflow: 'hidden'}}>
       <TouchableOpacity
         onPress={() => {
           LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -46,7 +38,6 @@ const EachYearsExpenses = ({data, userData}) => {
       {isShowMonths && (
         <Animated.View
           style={{
-            opacity: toggleMonthsShown,
             zIndex: 0,
           }}>
           <FlatList
@@ -62,7 +53,7 @@ const EachYearsExpenses = ({data, userData}) => {
           />
         </Animated.View>
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 

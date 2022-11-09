@@ -4,7 +4,6 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import EachYearsExpenses from '../component/expensesScreen/EachYearsExpenses';
 
 const ExpensesScreen = ({route}) => {
-  const [allYears, setAllYears] = useState();
   const [allMonthsInYears, setallMonthsInYears] = useState([]);
   const {userData} = route.params;
 
@@ -30,7 +29,6 @@ const ExpensesScreen = ({route}) => {
       });
       allMonthInYears.push(EachYear(year, monthArray));
     });
-    setAllYears(allYears);
     setallMonthsInYears(allMonthInYears);
     console.log(allYears);
     console.log(allMonthInYears);

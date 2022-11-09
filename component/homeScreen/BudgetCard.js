@@ -1,5 +1,12 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Animated,
+  LayoutAnimation,
+} from 'react-native';
+import React, {useEffect, useState, useRef} from 'react';
 import BudgetCardBudget from './BudgetCardBudget';
 import BudgetCardSpent from './BudgetCardSpent';
 
@@ -10,9 +17,20 @@ const BudgetCard = props => {
   };
 
   const [isSeeDetails, setIsSeeDeatils] = useState(false);
+  const toggleBudgetDetails = useRef(new Animated.Value(0)).current;
+
+  const animation = () => {
+    Animated.timing(toggleBudgetDetails, {
+      toValue: isSeeDetails ? 1 : 0,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+  };
 
   const openBudget = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setIsSeeDeatils(!isSeeDetails);
+    animation();
   };
 
   return (
@@ -28,7 +46,13 @@ const BudgetCard = props => {
           </TouchableOpacity>
         </View>
       ) : (
-        <View style={[styles.card, styles.withBudget, styles.elevation]}>
+        <Animated.View
+          style={[
+            styles.card,
+            styles.withBudget,
+            styles.elevation,
+            {overflow: 'hidden'},
+          ]}>
           <BudgetCardBudget
             userData={props.userData}
             budget={props.budget}
@@ -58,7 +82,7 @@ const BudgetCard = props => {
               <TouchableOpacity
                 style={styles.optionsBtn}
                 onPress={props.openLogExpenseModal}>
-                <Text style={styles.optionsBtnText}>Log Expense</Text>
+                <Text style={styles.optionsBtnText}>Enter Expense</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.optionsBtn} onPress={openBudget}>
                 <Text style={styles.optionsBtnText}>Details</Text>
@@ -75,7 +99,7 @@ const BudgetCard = props => {
               </TouchableOpacity>
             </View>
           )}
-        </View>
+        </Animated.View>
       )}
     </>
   );

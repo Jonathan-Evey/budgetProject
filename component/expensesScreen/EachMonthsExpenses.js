@@ -2,38 +2,63 @@ import {
   StyleSheet,
   Text,
   View,
-  SafeAreaView,
   FlatList,
   TouchableOpacity,
+  Animated,
+  LayoutAnimation,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import EachExpense from './EachExpense';
 
 const EachMonthsExpenses = ({data, userData, year}) => {
-  const [eachExpense, setEachExpense] = useState([]);
+  const [eachExpense, setEachExpense] = useState();
+  const [isShowEachExpense, setIsShowEachExpense] = useState(false);
+  const toggleEachExpenseShown = useRef(new Animated.Value(0)).current;
 
-  const objKeyValues = (obj, value) => {
-    return Object.keys(obj).find(key => key === value);
+  const toggleEachExpense = () => {
+    Animated.timing(toggleEachExpenseShown, {
+      toValue: isShowEachExpense ? 1 : 0,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
   };
 
-  const findAllExpenseData = () => {
-    let currentMonthData = userData.expenses[year][data];
-    setEachExpense(currentMonthData);
-  };
+  // const objKeyValues = (obj, value) => {
+  //   return Object.keys(obj).find(key => key === value);
+  // };
+
+  // const findAllExpenseData = () => {
+  //   let currentMonthData = userData.expenses[year][data];
+  //   console.log(currentMonthData);
+  //   setEachExpense(currentMonthData);
+  // };
+
   useEffect(() => {
-    findAllExpenseData();
-  }, []);
+    toggleEachExpense();
+  }, [isShowEachExpense]);
+
+  // useEffect(() => {
+  //   findAllExpenseData();
+  // }, []);
+
   return (
-    <SafeAreaView>
-      <Text style={{backgroundColor: 'blue', height: 50}}>{data}</Text>
-      {eachExpense ? (
+    <View>
+      <TouchableOpacity
+        onPress={() => {
+          LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+          setIsShowEachExpense(!isShowEachExpense);
+        }}>
+        <Text style={{backgroundColor: 'blue', height: 50}}>{data}</Text>
+      </TouchableOpacity>
+
+      {isShowEachExpense && (
         <FlatList
-          data={eachExpense}
+          data={userData.expenses[year][data]}
           renderItem={({item}) => <EachExpense data={item} />}
           keyExtractor={(item, index) => index}
         />
-      ) : null}
-    </SafeAreaView>
+      )}
+    </View>
   );
 };
 

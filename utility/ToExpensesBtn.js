@@ -10,7 +10,7 @@ const ToExpensesBtn = props => {
       onPress={() =>
         navigation.navigate('Expenses', {userData: props.userData})
       }>
-      <Text style={styles.btnText}>Full Details</Text>
+      <Text style={styles.btnText}>View Expenses</Text>
     </TouchableOpacity>
   );
 };
