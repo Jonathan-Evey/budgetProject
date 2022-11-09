@@ -1,8 +1,30 @@
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import ToExpensesBtn from '../../utility/ToExpensesBtn';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 const BudgetCardSpent = props => {
+  const [spentAmount, setSpentAmount] = useState(null);
+
+  const formatSpentAmount = () => {
+    let spentAmount = props.spent.toString().replace(/[^0-9]/g, '');
+
+    if (spentAmount.length > 5) {
+      return setSpentAmount(
+        `$${spentAmount.slice(0, spentAmount.length - 5)},${spentAmount.slice(
+          spentAmount.length - 5,
+          spentAmount.length - 2,
+        )}.${spentAmount.slice(spentAmount.length - 2, spentAmount.length)}`,
+      );
+    } else {
+      console.log(props.spent.length);
+      return setSpentAmount(`$${props.spent}`);
+    }
+  };
+
+  useEffect(() => {
+    formatSpentAmount();
+  }, [props.spent]);
+
   return (
     <>
       <View style={styles.budgetDetails}>
@@ -18,7 +40,7 @@ const BudgetCardSpent = props => {
               )} over budget`}</Text>
             ) : null}
           </View>
-          <Text style={[styles.budgetTotal]}>{props.spent}</Text>
+          <Text style={[styles.budgetTotal]}>{spentAmount}</Text>
         </View>
         {props.spentPercent < 100 ? (
           <View

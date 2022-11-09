@@ -53,6 +53,7 @@ const BudgetCard = props => {
             styles.elevation,
             {overflow: 'hidden'},
           ]}>
+          <Text style={styles.title}>Budget</Text>
           <BudgetCardBudget
             userData={props.userData}
             budget={props.budget}
@@ -116,10 +117,15 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     marginTop: 25,
   },
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#223252',
+  },
   withBudget: {
     justifyContent: 'flex-end',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingBottom: 10,
   },
   elevation: {
     shadowColor: 'black',

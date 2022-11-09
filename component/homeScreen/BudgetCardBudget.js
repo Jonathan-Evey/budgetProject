@@ -2,6 +2,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 
 const BudgetCardBudget = props => {
+  const [remainingAmount, setRemainingAmount] = useState(null);
   // const calculatePercent = () => {
   //   if (props.isAdditionalIncome) {
   //     return (props.budgetSpent / props.budget) * 100
@@ -19,12 +20,34 @@ const BudgetCardBudget = props => {
 
   // let budgetUsedPercent = calculatePercent()
   // let budgetTotal = calculateBudgetTotal()
+
+  const formatBudgetRemaining = () => {
+    let amountRemaining = (props.budget - props.budgetSpent).toFixed();
+    if (amountRemaining.length > 3) {
+      return setRemainingAmount(
+        `$${amountRemaining.slice(
+          0,
+          amountRemaining.length - 3,
+        )},${amountRemaining.slice(
+          amountRemaining.length - 3,
+          amountRemaining.length,
+        )}`,
+      );
+    } else {
+      return setRemainingAmount(`$${amountRemaining}`);
+    }
+  };
+
+  useEffect(() => {
+    formatBudgetRemaining();
+  }, [props.budgetSpent]);
+
   return (
     <>
       <View style={styles.budgetDetails}>
         <View style={styles.budgetDetailsTextContainer}>
           <View style={styles.budgetDetailsTextContainerLeft}>
-            <Text style={styles.budgetTitle}>Budget</Text>
+            <Text style={styles.budgetTitle}>Remaining</Text>
             {props.budgetUsedPercent < 100 ? (
               <Text
                 style={{
@@ -37,7 +60,7 @@ const BudgetCardBudget = props => {
                 }}>{`Used ${props.budgetUsedPercent.toFixed()}%`}</Text>
             )}
           </View>
-          <Text style={styles.budgetTotal}>{props.budget}</Text>
+          <Text style={styles.budgetTotal}>{remainingAmount}</Text>
         </View>
         {props.budgetUsedPercent < 100 ? (
           <View
@@ -89,7 +112,7 @@ const styles = StyleSheet.create({
   },
   budgetTitle: {
     fontSize: 24,
-    paddingBottom: 10,
+    paddingTop: 5,
     color: '#223252',
   },
   budgetSupTitle: {
