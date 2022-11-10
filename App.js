@@ -7,6 +7,7 @@ import LoginScreen from './screens/LoginScreen';
 import SignupScreen from './screens/SignupScreen';
 import HomeScreen from './screens/HomeScreen';
 import ExpensesScreen from './screens/ExpensesScreen';
+import BudgetScreen from './screens/BudgetScreen';
 
 if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -61,6 +62,20 @@ const App = () => {
             },
           }}
           component={ExpensesScreen}
+        />
+        <Stack.Screen
+          name="Budget"
+          options={{
+            headerTitleAlign: 'center',
+            headerLargeTitleShadowVisible: false,
+            headerTransparent: true,
+            headerTintColor: '#223252',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+              fontSize: 28,
+            },
+          }}
+          component={BudgetScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
