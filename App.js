@@ -54,6 +54,11 @@ const App = () => {
             headerTitleAlign: 'center',
             headerLargeTitleShadowVisible: false,
             headerTransparent: true,
+            headerTintColor: '#223252',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+              fontSize: 28,
+            },
           }}
           component={ExpensesScreen}
         />
