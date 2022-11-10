@@ -70,15 +70,18 @@ const HomeScreen = ({navigation}) => {
       year,
     );
     if (budgetData.additionalIncome) {
-      if (
-        budgetData.additionalIncome.month === month &&
-        budgetData.additionalIncome.year === year
-      ) {
-        let budgetTotal =
-          budgetData.additionalIncome.amount + budgetData.mainBudget;
+      let additionalIncomeTotal = 0;
+      budgetData.additionalIncome.forEach(entry => {
+        if (entry.month === month && entry.year === year) {
+          additionalIncomeTotal =
+            additionalIncomeTotal + Number(entry.amount.replace(/,/g, ''));
+        }
+      });
+      if (additionalIncomeTotal !== 0) {
+        let budgetTotal = additionalIncomeTotal + budgetData.mainBudget;
         setIsAdditionalIncome(true);
         setTotalBudgetAmount(budgetTotal);
-        checkBudgetUsedPercent(budgetTotal, currentMonthExpenseData);
+        return checkBudgetUsedPercent(budgetTotal, currentMonthExpenseData);
       } else {
         setTotalBudgetAmount(budgetData.mainBudget);
         checkBudgetUsedPercent(budgetData.mainBudget, currentMonthExpenseData);
@@ -134,7 +137,16 @@ const HomeScreen = ({navigation}) => {
     return Object.keys(obj).find(key => key === value);
   };
 
-  const formatExpenceObj = (monthData, yearData, newObj) => {
+  const formatExtraIncomeObj = newObj => {
+    if (userData.additionalIncome) {
+      let currentData = userData.additionalIncome;
+      return [newObj, ...currentData];
+    } else {
+      return [newObj];
+    }
+  };
+
+  const formatExpenseObj = (monthData, yearData, newObj) => {
     if (userData.expenses) {
       if (objKeyValues(userData.expenses, `${yearData}`)) {
         if (objKeyValues(userData.expenses[yearData], `${monthData}`)) {
@@ -182,12 +194,35 @@ const HomeScreen = ({navigation}) => {
       expenseName: category,
       description: descriptionData,
     };
-    let newExpenceObj = formatExpenceObj(monthData, yearData, newObj);
-
+    let newExpenseObj = formatExpenseObj(monthData, yearData, newObj);
     await setDoc(
       doc(db, 'users', auth.currentUser.uid),
       {
-        expenses: newExpenceObj,
+        expenses: newExpenseObj,
+      },
+      {merge: true},
+    )
+      .then(() => {
+        setUpdateUserData(!updateUserData);
+        console.log('data added');
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  const saveExtraIncome = async (amountData, dayData, monthData, yearData) => {
+    let newObj = {
+      amount: amountData,
+      day: dayData,
+      month: monthData,
+      year: yearData,
+    };
+    let formatedNewObj = formatExtraIncomeObj(newObj);
+    await setDoc(
+      doc(db, 'users', auth.currentUser.uid),
+      {
+        additionalIncome: formatedNewObj,
       },
       {merge: true},
     )
@@ -265,6 +300,7 @@ const HomeScreen = ({navigation}) => {
             isAdditionalIncome={isAdditionalIncome}
             userData={userData}
             closeAddIncomeModal={closeAddIncomeModal}
+            saveExtraIncome={saveExtraIncome}
             setUpdateUserData={setUpdateUserData}
             updateUserData={updateUserData}
           />
