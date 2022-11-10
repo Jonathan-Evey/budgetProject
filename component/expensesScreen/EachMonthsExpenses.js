@@ -11,7 +11,6 @@ import React, {useState, useEffect, useRef} from 'react';
 import EachExpense from './EachExpense';
 
 const EachMonthsExpenses = ({data, userData, year}) => {
-  const [eachExpense, setEachExpense] = useState();
   const [isShowEachExpense, setIsShowEachExpense] = useState(false);
   const toggleEachExpenseShown = useRef(new Animated.Value(0)).current;
 
@@ -23,32 +22,45 @@ const EachMonthsExpenses = ({data, userData, year}) => {
     }).start();
   };
 
-  // const objKeyValues = (obj, value) => {
-  //   return Object.keys(obj).find(key => key === value);
-  // };
-
-  // const findAllExpenseData = () => {
-  //   let currentMonthData = userData.expenses[year][data];
-  //   console.log(currentMonthData);
-  //   setEachExpense(currentMonthData);
-  // };
+  const monthTextArray = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
 
   useEffect(() => {
     toggleEachExpense();
   }, [isShowEachExpense]);
 
-  // useEffect(() => {
-  //   findAllExpenseData();
-  // }, []);
+  useEffect(() => {
+    let month = new Date().getMonth() + 1;
+
+    if (
+      data === month.toString() &&
+      year === new Date().getFullYear().toString()
+    ) {
+      setIsShowEachExpense(true);
+    }
+  }, []);
 
   return (
-    <View>
+    <View style={styles.card}>
       <TouchableOpacity
+        style={styles.monthHeader}
         onPress={() => {
           LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
           setIsShowEachExpense(!isShowEachExpense);
         }}>
-        <Text style={{backgroundColor: 'blue', height: 50}}>{data}</Text>
+        <Text style={styles.title}>{monthTextArray[data - 1]}</Text>
       </TouchableOpacity>
 
       {isShowEachExpense && (
@@ -64,4 +76,21 @@ const EachMonthsExpenses = ({data, userData, year}) => {
 
 export default EachMonthsExpenses;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  card: {
+    backgroundColor: '#d3d9d6',
+  },
+  monthHeader: {
+    paddingLeft: 25,
+    paddingTop: 5,
+    paddingBottom: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: '#7a8497',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    color: '#223252',
+  },
+});

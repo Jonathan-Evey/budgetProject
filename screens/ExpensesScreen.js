@@ -39,29 +39,32 @@ const ExpensesScreen = ({route}) => {
   }, []);
 
   return (
-    <View style={{paddingTop: 250}}>
-      <TouchableOpacity onPress={() => console.log(userData)}>
-        <Text>press</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => console.log(allMonthsInYears)}>
-        <Text>press</Text>
-      </TouchableOpacity>
-      <Text>ExpensesScreen</Text>
+    <SafeAreaView style={[styles.container, {paddingTop: 75}]}>
       {allMonthsInYears !== [] ? (
-        <SafeAreaView>
-          <FlatList
-            data={allMonthsInYears}
-            renderItem={({item}) => (
-              <EachYearsExpenses data={item} userData={userData} />
-            )}
-            keyExtractor={(item, index) => index}
-          />
-        </SafeAreaView>
+        <FlatList
+          style={styles.card}
+          data={allMonthsInYears}
+          renderItem={({item}) => (
+            <EachYearsExpenses data={item} userData={userData} />
+          )}
+          keyExtractor={(item, index) => index}
+        />
       ) : null}
-    </View>
+    </SafeAreaView>
   );
 };
 
 export default ExpensesScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: '#EAF1EE',
+  },
+  card: {
+    width: '100%',
+    backgroundColor: '#EAF1EE',
+    paddingTop: 15,
+  },
+});

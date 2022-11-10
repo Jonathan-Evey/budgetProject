@@ -26,14 +26,21 @@ const EachYearsExpenses = ({data, userData}) => {
     toggleMonths();
   }, [isShowMonths]);
 
+  useEffect(() => {
+    if (data.year === new Date().getFullYear().toString()) {
+      setIsShowMonths(true);
+    }
+  }, []);
+
   return (
-    <View style={{overflow: 'hidden'}}>
+    <View style={[styles.card, {overflow: 'hidden'}]}>
       <TouchableOpacity
+        style={styles.yearHedder}
         onPress={() => {
           LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
           setIsShowMonths(!isShowMonths);
         }}>
-        <Text>{data.year}</Text>
+        <Text style={styles.title}>{data.year}</Text>
       </TouchableOpacity>
       {isShowMonths && (
         <Animated.View
@@ -59,4 +66,30 @@ const EachYearsExpenses = ({data, userData}) => {
 
 export default EachYearsExpenses;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  card: {
+    flex: 1,
+    marginRight: '5%',
+    marginLeft: '5%',
+    backgroundColor: '#bbc1be',
+    borderRadius: 25,
+    borderColor: '#223252',
+    borderWidth: 3,
+    shadowColor: 'black',
+    elevation: 10,
+    marginBottom: 15,
+  },
+  yearHedder: {
+    paddingLeft: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: '#384763',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    color: '#223252',
+  },
+});
