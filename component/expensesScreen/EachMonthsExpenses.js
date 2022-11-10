@@ -69,11 +69,18 @@ const EachMonthsExpenses = ({data, userData, year}) => {
       </TouchableOpacity>
 
       {isShowEachExpense && (
-        <FlatList
-          data={userData.expenses[year][data]}
-          renderItem={({item}) => <EachExpense data={item} />}
-          keyExtractor={(item, index) => index}
-        />
+        <>
+          <View style={styles.eachExpenseHeader}>
+            <Text style={styles.headerText}>Day</Text>
+            <Text style={styles.headerText}>Category</Text>
+            <Text style={styles.headerText}>Amount</Text>
+          </View>
+          <FlatList
+            data={userData.expenses[year][data]}
+            renderItem={({item}) => <EachExpense data={item} month={data} />}
+            keyExtractor={(item, index) => index}
+          />
+        </>
       )}
     </View>
   );
@@ -101,5 +108,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 5,
     color: '#223252',
+  },
+  eachExpenseHeader: {
+    paddingHorizontal: 10,
+    backgroundColor: '#dbe2e0',
+    borderBottomWidth: 2,
+    borderBottomColor: '#9199a9',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  headerText: {
+    color: '#223252',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });

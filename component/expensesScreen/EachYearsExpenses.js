@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     shadowColor: 'black',
     elevation: 10,
-    marginBottom: 15,
+    marginBottom: 20,
   },
   yearHedder: {
     flexDirection: 'row',
