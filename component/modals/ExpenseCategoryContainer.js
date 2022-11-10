@@ -3,6 +3,7 @@ import React from 'react';
 
 const ExpenseCategoryContainer = props => {
   const updateEpense = data => {
+    props.setNoCategorySelected(false);
     props.setExpenseCategory(data);
   };
 
