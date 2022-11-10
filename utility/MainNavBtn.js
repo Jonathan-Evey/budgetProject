@@ -1,11 +1,5 @@
-import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Animated,
-  LayoutAnimation,
-} from 'react-native';
-import React, {useState, useEffect, useRef} from 'react';
+import {StyleSheet, TouchableOpacity, Animated} from 'react-native';
+import React, {useState, useEffect} from 'react';
 
 const MainNavBtn = props => {
   const shortBarAnimation = useState(new Animated.Value(0))[0];

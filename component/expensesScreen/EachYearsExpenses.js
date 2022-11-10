@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import React, {useState, useRef, useEffect} from 'react';
 import EachMonthsExpenses from './EachMonthsExpenses';
+import DropDownMenuIcon from '../../utility/DropDownMenuIcon';
 
 const EachYearsExpenses = ({data, userData}) => {
   const [isShowMonths, setIsShowMonths] = useState(false);
@@ -41,6 +42,7 @@ const EachYearsExpenses = ({data, userData}) => {
           setIsShowMonths(!isShowMonths);
         }}>
         <Text style={styles.title}>{data.year}</Text>
+        <DropDownMenuIcon bgColor={'#4e5b75'} isDropDownOpen={isShowMonths} />
       </TouchableOpacity>
       {isShowMonths && (
         <Animated.View
@@ -80,7 +82,11 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   yearHedder: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingLeft: 15,
+    paddingRight: 15,
     paddingTop: 5,
     paddingBottom: 5,
     borderBottomWidth: 1,
@@ -89,6 +95,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    marginTop: 2,
     marginBottom: 5,
     color: '#223252',
   },
