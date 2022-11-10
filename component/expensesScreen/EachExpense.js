@@ -34,7 +34,7 @@ const EachExpense = ({month, data}) => {
   return (
     <View style={styles.card}>
       <Text style={styles.cardText}>{formatDate(month, data.date)}</Text>
-      <View style={{alignItems: 'center'}}>
+      <View style={{alignItems: 'center', paddingLeft: 10}}>
         <Text style={styles.cardText}>{data.expenseName}</Text>
         {data.description !== '' && (
           <Text style={[styles.cardText, {paddingTop: 10}]}>
@@ -69,8 +69,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingLeft: 15,
-    paddingRight: 10,
+    paddingLeft: 20,
+    paddingRight: 15,
     paddingTop: 10,
     paddingBottom: 5,
     backgroundColor: '#dbe2e0',
