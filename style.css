@@ -1,7 +1,28 @@
 :root {
-    -clr--lightest: #EAF1EE;
-    -clr--light: #dbe2e0;
+    -clr--starting-lightest: #EAF1EE;
+    -clr--10-percent: #d3d9d6;
+    -clr--20-percent: #bbc1be;
+    -clr--30-percent: #a4a9a7;
+    -clr--40-percent: #8c918f;
+    -clr--50-percent: #757977;
+    -clr--60-percent: #5e605f;
+    -clr--70-percent: #464847;
+    -clr--80-percent: #2f3030;
+    -clr--90-percent: #171818;
+
+
+
+
+    -clr--main-card-bg: #dbe2e0;
+    
     -clr--mid: #ced4d2;
+
+    -clr--light-60: #a7adba;
+    -clr--light-50: #9199a9;
+    -clr--light-40: #7a8497;
+    -clr--light-30: #647086;
+    -clr--light-20: #4e5b75;
+    -clr--light-10: #384763;
     -clr--dark: #223252;
     -clr--main: #DE2555;
 
