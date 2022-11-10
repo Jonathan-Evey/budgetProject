@@ -6,23 +6,11 @@ const MainNavBtn = props => {
   const midBarAnimation = useState(new Animated.Value(0))[0];
   const longBarAnimation = useState(new Animated.Value(0))[0];
   const xBarAnimation = useState(new Animated.Value(0))[0];
-  const xBarTwoAnimation = useState(new Animated.Value(0))[0];
 
   const showBars = () => {
     Animated.sequence([
-      Animated.timing(xBarTwoAnimation, {
-        toValue: -60,
-        duration: 150,
-        useNativeDriver: true,
-      }),
       Animated.timing(xBarAnimation, {
         toValue: 60,
-        duration: 150,
-        useNativeDriver: true,
-      }),
-
-      Animated.timing(shortBarAnimation, {
-        toValue: 0,
         duration: 150,
         useNativeDriver: true,
       }),
@@ -32,6 +20,11 @@ const MainNavBtn = props => {
         useNativeDriver: true,
       }),
       Animated.timing(midBarAnimation, {
+        toValue: 0,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+      Animated.timing(shortBarAnimation, {
         toValue: 0,
         duration: 150,
         useNativeDriver: true,
@@ -40,27 +33,22 @@ const MainNavBtn = props => {
   };
   const closeBars = () => {
     Animated.sequence([
+      Animated.timing(shortBarAnimation, {
+        toValue: -50,
+        duration: 150,
+        useNativeDriver: true,
+      }),
       Animated.timing(midBarAnimation, {
-        toValue: 50,
+        toValue: -50,
         duration: 150,
         useNativeDriver: true,
       }),
       Animated.timing(longBarAnimation, {
-        toValue: 50,
-        duration: 150,
-        useNativeDriver: true,
-      }),
-      Animated.timing(shortBarAnimation, {
-        toValue: 50,
+        toValue: -50,
         duration: 150,
         useNativeDriver: true,
       }),
       Animated.timing(xBarAnimation, {
-        toValue: 0,
-        duration: 150,
-        useNativeDriver: true,
-      }),
-      Animated.timing(xBarTwoAnimation, {
         toValue: 0,
         duration: 150,
         useNativeDriver: true,
@@ -119,8 +107,8 @@ const MainNavBtn = props => {
           {
             transform: [
               {translateY: 14},
-              {rotate: '135deg'},
-              {translateX: xBarTwoAnimation},
+              {rotate: '315deg'},
+              {translateX: xBarAnimation},
             ],
           },
         ]}></Animated.View>
