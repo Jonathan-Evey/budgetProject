@@ -1,5 +1,6 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
+import ToBudgetBtn from '../../utility/ToBudgetBtn';
 
 const BudgetCardBudget = props => {
   const [remainingAmount, setRemainingAmount] = useState(null);
@@ -28,7 +29,7 @@ const BudgetCardBudget = props => {
 
   useEffect(() => {
     formatBudgetRemaining();
-  }, [props.budgetSpent]);
+  }, [props.budget]);
 
   return (
     <>
@@ -72,9 +73,7 @@ const BudgetCardBudget = props => {
             onPress={props.openAddIncomeModal}>
             <Text style={styles.btnText}>Add Extra Income</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btn}>
-            <Text style={styles.btnText}>Details</Text>
-          </TouchableOpacity>
+          <ToBudgetBtn userData={props.userData} />
         </View>
       ) : null}
     </>
