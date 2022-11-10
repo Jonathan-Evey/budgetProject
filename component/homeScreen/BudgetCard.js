@@ -6,7 +6,7 @@ import {
   Animated,
   LayoutAnimation,
 } from 'react-native';
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useState, useRef} from 'react';
 import BudgetCardBudget from './BudgetCardBudget';
 import BudgetCardSpent from './BudgetCardSpent';
 
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
   title: {
-    fontSize: 26,
+    fontSize: 32,
     fontWeight: 'bold',
     color: '#223252',
   },

@@ -30,7 +30,7 @@ const BudgetCardSpent = props => {
       <View style={styles.budgetDetails}>
         <View style={styles.budgetDetailsTextContainer}>
           <View style={styles.budgetDetailsTextContainerLeft}>
-            <Text style={[styles.budgetTitle, {marginTop: 15}]}>Expenses</Text>
+            <Text style={[styles.budgetTitle, {marginTop: 15}]}>Spent</Text>
             {props.spentPercent > 100 ? (
               <Text
                 style={{
@@ -40,7 +40,7 @@ const BudgetCardSpent = props => {
               <Text
                 style={{
                   color: '#223252',
-                }}>{`Used ${props.spentPercent.toFixed()}% of budget`}</Text>
+                }}>{`${props.spentPercent.toFixed()}% of budget`}</Text>
             )}
           </View>
           <Text style={[styles.budgetTotal]}>{spentAmount}</Text>
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   },
   budgetTitle: {
     fontSize: 24,
-
+    fontWeight: 'bold',
     color: '#223252',
   },
   budgetTotal: {

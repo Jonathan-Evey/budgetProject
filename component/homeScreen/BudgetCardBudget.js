@@ -3,23 +3,6 @@ import React, {useEffect, useState} from 'react';
 
 const BudgetCardBudget = props => {
   const [remainingAmount, setRemainingAmount] = useState(null);
-  // const calculatePercent = () => {
-  //   if (props.isAdditionalIncome) {
-  //     return (props.budgetSpent / props.budget) * 100
-  //   } else {
-  //     return (props.budgetSpent / props.userData.mainBudget) * 100
-  //   }
-  // }
-  // const calculateBudgetTotal = () => {
-  //   if (props.isAdditionalIncome) {
-  //     return props.userData.mainBudget + props.userData.additionalIncome.amount
-  //   } else {
-  //     return props.userData.mainBudget
-  //   }
-  // }
-
-  // let budgetUsedPercent = calculatePercent()
-  // let budgetTotal = calculateBudgetTotal()
 
   const formatBudgetRemaining = () => {
     let amountRemaining = (props.budget - props.budgetSpent)
@@ -57,6 +40,7 @@ const BudgetCardBudget = props => {
               <Text
                 style={{
                   color: '#b31515',
+                  marginTop: -5,
                 }}>{`Over budget by ${
                 props.budgetUsedPercent.toFixed() - 100
               }%`}</Text>
@@ -110,15 +94,13 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   budgetDetailsTextContainerLeft: {
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
   },
   budgetTitle: {
     fontSize: 24,
-    paddingTop: 5,
+    fontWeight: 'bold',
+    marginBottom: 5,
     color: '#223252',
-  },
-  budgetSupTitle: {
-    paddingBottom: 5,
   },
   budgetTotal: {
     fontSize: 40,
