@@ -7,6 +7,8 @@ import {
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import CloseBtn from '../../utility/CloseBtn';
+import AmountInput from '../../utility/AmountInput';
+import ModalSaveBtn from '../../utility/ModalSaveBtn';
 import ExpenseCategoryContainer from './ExpenseCategoryContainer';
 import DayDropDown from './selectorComponent/DayDropDown';
 import DaysInDropDown from './selectorComponent/DaysInDropDown';
@@ -31,6 +33,7 @@ const AddExpenseModal = props => {
   const [noCategorySelected, setNoCategorySelected] = useState(false);
 
   const formatExpenseInput = input => {
+    input = input.replace(/[^0-9]/g, '');
     if (input.length > 8) {
       setExpenseTotal(expenseTotal);
     } else if (input.length > 5) {
@@ -51,6 +54,7 @@ const AddExpenseModal = props => {
       if (input === '0') {
         setExpenseTotal('');
       } else {
+        setNoExpenseAddedError(false);
         setExpenseTotal(input);
       }
     } else {
@@ -70,7 +74,7 @@ const AddExpenseModal = props => {
 
   const validatData = () => {
     if (expenseTotal === '') {
-      return setNoExpenseAddedError(true);
+      setNoExpenseAddedError(true);
     }
     if (expenseCategory === '') {
       return setNoCategorySelected(true);
@@ -108,20 +112,17 @@ const AddExpenseModal = props => {
             marginBottom: 15,
           }}>
           <Text style={styles.expenseInputText}>$</Text>
-          <TextInput
-            style={styles.expenseAmountInput}
-            placeholder="0.00"
-            keyboardType="numeric"
-            value={expenseTotal}
-            textAlign="right"
-            onChangeText={text =>
-              formatExpenseInput(text.replace(/[^0-9]/g, ''))
-            }
+          <AmountInput
+            valueProp={expenseTotal}
+            onChangeProp={formatExpenseInput}
           />
+          {noExpenseAddedError && (
+            <Text style={[styles.errorText, {bottom: -20}]}>
+              Please include expense amount
+            </Text>
+          )}
         </View>
-        {noExpenseAddedError ? (
-          <Text style={styles.errorText}>Please add an expense amount</Text>
-        ) : null}
+
         <Text style={styles.expenseTitle}>Date</Text>
         <View style={styles.dateContainer}>
           <MonthDropDown
@@ -177,10 +178,13 @@ const AddExpenseModal = props => {
             <ExpenseCategoryContainer
               expenseCategory={expenseCategory}
               setExpenseCategory={setExpenseCategory}
+              setNoCategorySelected={setNoCategorySelected}
             />
-            {noCategorySelected ? (
-              <Text style={styles.errorText}>Please add an expense amount</Text>
-            ) : null}
+            {noCategorySelected && (
+              <Text style={[styles.errorText, {bottom: -15}]}>
+                Please select a category
+              </Text>
+            )}
           </View>
           <Text style={styles.expenseTitle}>Optional Description</Text>
           <TextInput
@@ -189,14 +193,8 @@ const AddExpenseModal = props => {
             onChangeText={text => setExpenseDescription(text)}
           />
         </View>
-        <View style={styles.saveBtnContainer}>
-          <TouchableOpacity
-            style={styles.saveBtn}
-            onPress={() => {
-              validatData();
-            }}>
-            <Text style={styles.saveBtnText}>Save Expense</Text>
-          </TouchableOpacity>
+        <View style={{alignItems: 'center'}}>
+          <ModalSaveBtn text={'Save Expense'} onPressProp={validatData} />
         </View>
       </View>
     </View>
@@ -238,7 +236,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#1d1d1d',
-    transform: [{translateY: -15}],
+    transform: [{translateY: -20}],
   },
   expenseTitle: {
     color: '#1d1d1d',
@@ -280,26 +278,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
-  saveBtnContainer: {
-    alignItems: 'center',
-  },
-  saveBtn: {
-    width: '50%',
-    backgroundColor: '#DE2555',
-    borderRadius: 250,
-    paddingVertical: 5,
-    marginTop: 15,
-    marginBottom: 5,
-  },
-  saveBtnText: {
-    color: '#1d1d1d',
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 18,
-  },
   errorText: {
     position: 'absolute',
-    bottom: 0,
+    right: 0,
+    left: 0,
+    textAlign: 'center',
     color: '#b31515',
+    fontWeight: 'bold',
   },
 });
