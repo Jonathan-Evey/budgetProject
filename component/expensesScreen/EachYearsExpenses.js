@@ -11,8 +11,9 @@ import React, {useState, useRef, useEffect} from 'react';
 import EachMonthsExpenses from './EachMonthsExpenses';
 import DropDownMenuIcon from '../../utility/DropDownMenuIcon';
 
-const EachYearsExpenses = ({data, userData}) => {
+const EachYearsExpenses = ({data, userData, allMonthsInYears}) => {
   const [isShowMonths, setIsShowMonths] = useState(false);
+  const [isLastCard, setIsLastCard] = useState(false);
   const toggleMonthsShown = useRef(new Animated.Value(0)).current;
 
   const toggleMonths = () => {
@@ -31,38 +32,48 @@ const EachYearsExpenses = ({data, userData}) => {
     if (data.year === new Date().getFullYear().toString()) {
       setIsShowMonths(true);
     }
+
+    if (data.year === allMonthsInYears[allMonthsInYears.length - 1].year) {
+      setIsLastCard(true);
+    }
   }, []);
 
   return (
-    <View style={[styles.card, {overflow: 'hidden'}]}>
-      <TouchableOpacity
-        style={styles.yearHedder}
-        onPress={() => {
-          LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-          setIsShowMonths(!isShowMonths);
-        }}>
-        <Text style={styles.title}>{data.year}</Text>
-        <DropDownMenuIcon bgColor={'#4e5b75'} isDropDownOpen={isShowMonths} />
-      </TouchableOpacity>
-      {isShowMonths && (
-        <Animated.View
-          style={{
-            zIndex: 0,
+    <>
+      <View style={[styles.card, {overflow: 'hidden'}]}>
+        <TouchableOpacity
+          style={styles.yearHedder}
+          onPress={() => {
+            LayoutAnimation.configureNext(
+              LayoutAnimation.Presets.easeInEaseOut,
+            );
+            setIsShowMonths(!isShowMonths);
           }}>
-          <FlatList
-            data={data.months}
-            renderItem={({item}) => (
-              <EachMonthsExpenses
-                data={item}
-                userData={userData}
-                year={data.year}
-              />
-            )}
-            keyExtractor={(item, index) => index}
-          />
-        </Animated.View>
-      )}
-    </View>
+          <Text style={styles.title}>{data.year}</Text>
+          <DropDownMenuIcon bgColor={'#4e5b75'} isDropDownOpen={isShowMonths} />
+        </TouchableOpacity>
+        {isShowMonths && (
+          <Animated.View
+            style={{
+              zIndex: 0,
+            }}>
+            <FlatList
+              data={data.months}
+              renderItem={({item}) => (
+                <EachMonthsExpenses
+                  data={item}
+                  userData={userData}
+                  year={data.year}
+                />
+              )}
+              keyExtractor={(item, index) => index}
+            />
+          </Animated.View>
+        )}
+      </View>
+      <View style={{height: 25}}></View>
+      {isLastCard && <View style={{height: 75}}></View>}
+    </>
   );
 };
 
@@ -79,7 +90,6 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     shadowColor: 'black',
     elevation: 10,
-    marginBottom: 20,
   },
   yearHedder: {
     flexDirection: 'row',
