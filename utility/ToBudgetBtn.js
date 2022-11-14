@@ -8,7 +8,7 @@ const ToBudgetBtn = props => {
     <TouchableOpacity
       style={styles.btn}
       onPress={() => navigation.navigate('Budget', {userData: props.userData})}>
-      <Text style={styles.btnText}>Details</Text>
+      <Text style={styles.btnText}>View Budget</Text>
     </TouchableOpacity>
   );
 };
