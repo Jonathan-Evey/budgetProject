@@ -11,8 +11,17 @@ import React, {useState, useEffect, useRef} from 'react';
 import EachExpense from './EachExpense';
 import DropDownMenuIcon from '../../utility/DropDownMenuIcon';
 
-const EachMonthsExpenses = ({data, userData, year}) => {
+const EachMonthsExpenses = ({
+  data,
+  userData,
+  year,
+  setUpdateUserData,
+  updateUserData,
+  isEdit,
+  isDelete,
+}) => {
   const [isShowEachExpense, setIsShowEachExpense] = useState(false);
+  const [sortedExpenses, setSortedExpenses] = useState([]);
   const toggleEachExpenseShown = useRef(new Animated.Value(0)).current;
 
   const toggleEachExpense = () => {
@@ -38,6 +47,14 @@ const EachMonthsExpenses = ({data, userData, year}) => {
     'December',
   ];
 
+  const sortData = () => {
+    let expensesInMonth = userData.expenses[year][data];
+    expensesInMonth.sort((a, b) => {
+      return b.date - a.date;
+    });
+    setSortedExpenses(expensesInMonth);
+  };
+
   useEffect(() => {
     toggleEachExpense();
   }, [isShowEachExpense]);
@@ -51,6 +68,7 @@ const EachMonthsExpenses = ({data, userData, year}) => {
     ) {
       setIsShowEachExpense(true);
     }
+    sortData();
   }, []);
 
   return (
@@ -71,14 +89,31 @@ const EachMonthsExpenses = ({data, userData, year}) => {
       {isShowEachExpense && (
         <>
           <View style={styles.eachExpenseHeader}>
-            <Text style={styles.headerText}>Day</Text>
             <Text style={styles.headerText}>Category</Text>
-            <Text style={styles.headerText}>Amount</Text>
+            <Text
+              style={[
+                styles.headerText,
+                {textAlign: 'center', marginLeft: 20},
+              ]}>
+              Amount
+            </Text>
+            <Text style={[styles.headerText, {textAlign: 'right'}]}>Day</Text>
           </View>
           <FlatList
-            data={userData.expenses[year][data]}
-            renderItem={({item}) => <EachExpense data={item} month={data} />}
-            keyExtractor={(item, index) => index}
+            data={sortedExpenses}
+            renderItem={({item, index}) => (
+              <EachExpense
+                userData={userData}
+                year={year}
+                data={item}
+                month={data}
+                setUpdateUserData={setUpdateUserData}
+                updateUserData={updateUserData}
+                isEdit={isEdit}
+                isDelete={isDelete}
+              />
+            )}
+            keyExtractor={item => item.id}
           />
         </>
       )}
@@ -118,6 +153,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   headerText: {
+    flex: 1,
     color: '#223252',
     fontSize: 18,
     fontWeight: 'bold',
