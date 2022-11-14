@@ -8,6 +8,7 @@ import {
 import React, {useState, useEffect} from 'react';
 import CloseBtn from '../../utility/CloseBtn';
 import AmountInput from '../../utility/AmountInput';
+import DescriptionInput from '../../utility/DescriptionInput';
 import ModalSaveBtn from '../../utility/ModalSaveBtn';
 import ExpenseCategoryContainer from './ExpenseCategoryContainer';
 import DayDropDown from './selectorComponent/DayDropDown';
@@ -187,10 +188,9 @@ const AddExpenseModal = props => {
             )}
           </View>
           <Text style={styles.expenseTitle}>Optional Description</Text>
-          <TextInput
-            style={styles.expenseInput}
-            value={expenseDescription}
-            onChangeText={text => setExpenseDescription(text)}
+          <DescriptionInput
+            onChangeProp={setExpenseDescription}
+            valueProp={expenseDescription}
           />
         </View>
         <View style={{alignItems: 'center'}}>
@@ -261,17 +261,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginHorizontal: 15,
     marginBottom: 10,
-  },
-  expenseAmountInput: {
-    fontWeight: 'bold',
-    color: '#223252',
-    fontSize: 22,
-    width: '100%',
-    borderRadius: 15,
-    borderBottomWidth: 2,
-    borderColor: 'black',
-    paddingRight: 15,
-    paddingVertical: 0,
   },
   flexEnd: {
     width: '100%',
