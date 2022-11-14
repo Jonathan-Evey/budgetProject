@@ -3,8 +3,10 @@ import React from 'react';
 
 const ExpenseCategoryContainer = props => {
   const updateEpense = data => {
-    props.setNoCategorySelected(false);
-    props.setExpenseCategory(data);
+    if (props.setNoCategoryErrorProp) {
+      props.setNoCategoryErrorProp(false);
+    }
+    props.setExpenseCategoryStateProp(data);
   };
 
   let eachCategory = [
@@ -26,7 +28,7 @@ const ExpenseCategoryContainer = props => {
     <View style={styles.container}>
       {eachCategory.map((category, index) => (
         <View key={index}>
-          {props.expenseCategory === category ? (
+          {props.expenseCategoryStateProp === category ? (
             <TouchableOpacity
               style={[styles.categoryBtn, styles.selected]}
               onPress={() => {
