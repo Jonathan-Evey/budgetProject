@@ -8,7 +8,7 @@ const ExpensesScreen = ({route}) => {
   const [allMonthsInYears, setAllMonthsInYears] = useState([]);
   const [isDelete, setIsDelete] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const {userData} = route.params;
+  const {userData, setUpdateUserData, updateUserData} = route.params;
 
   const objKeyValues = obj => {
     return Object.keys(obj);
@@ -35,6 +35,20 @@ const ExpensesScreen = ({route}) => {
     setAllMonthsInYears(allMonths);
   };
 
+  const toggleEditBtns = () => {
+    if (isDelete) {
+      setIsDelete(false);
+    }
+    setIsEdit(!isEdit);
+  };
+
+  const toggleDeleteBtns = () => {
+    if (isEdit) {
+      setIsEdit(false);
+    }
+    setIsDelete(!isDelete);
+  };
+
   useEffect(() => {
     formatExpensesData();
   }, []);
@@ -50,14 +64,21 @@ const ExpensesScreen = ({route}) => {
               allMonthsInYears={allMonthsInYears}
               data={item}
               userData={userData}
+              setUpdateUserData={setUpdateUserData}
+              updateUserData={updateUserData}
               isEdit={isEdit}
               isDelete={isDelete}
             />
           )}
-          keyExtractor={(item, index) => index}
+          keyExtractor={item => item.year}
         />
       ) : null}
-      <EditMenuBtn />
+      <EditMenuBtn
+        setIsDelete={setIsDelete}
+        setIsEdit={setIsEdit}
+        toggleDeleteBtns={toggleDeleteBtns}
+        toggleEditBtns={toggleEditBtns}
+      />
     </SafeAreaView>
   );
 };
