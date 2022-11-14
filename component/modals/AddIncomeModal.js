@@ -1,5 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useState, useEffect} from 'react';
+import formatExpenseInput from '../../functions/formatNumericInput';
 import CloseBtn from '../../utility/CloseBtn';
 import AmountInput from '../../utility/AmountInput';
 import DescriptionInput from '../../utility/DescriptionInput';
@@ -25,33 +26,13 @@ const AddIncomeModal = props => {
 
   const [noIncomeInputError, setNoIncomeInputError] = useState(false);
 
-  const formatInput = input => {
-    input = input.replace(/[^0-9]/g, '');
-    if (input.length > 8) {
-      setAdditionalIncome(additionalIncome);
-    } else if (input.length > 5) {
-      setAdditionalIncome(
-        `${input.slice(0, input.length - 5)},${input.slice(
-          input.length - 5,
-          input.length - 2,
-        )}.${input.slice(input.length - 2, input.length)}`,
-      );
-    } else if (input.length > 2) {
-      setAdditionalIncome(
-        `${input.slice(0, input.length - 2)}.${input.slice(
-          input.length - 2,
-          input.length,
-        )}`,
-      );
-    } else if (input.length === 1) {
-      if (input === '0') {
-        setAdditionalIncome('');
-      } else {
-        setAdditionalIncome(input);
-      }
-    } else {
-      setAdditionalIncome(input);
-    }
+  const runFormatFunction = input => {
+    formatExpenseInput(
+      input,
+      setAdditionalIncome,
+      additionalIncome,
+      setNoIncomeInputError,
+    );
   };
 
   const validateData = () => {
@@ -106,8 +87,10 @@ const AddIncomeModal = props => {
           }}>
           <Text style={styles.expenseInputText}>$</Text>
           <AmountInput
+            placeholderProp="0.00"
+            fontSizeProp={22}
             valueProp={additionalIncome}
-            onChangeProp={formatInput}
+            onChangeProp={runFormatFunction}
           />
           {noIncomeInputError ? (
             <Text style={[styles.errorText, {bottom: -20}]}>

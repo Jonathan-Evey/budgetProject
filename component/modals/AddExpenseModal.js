@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
+import formatExpenseInput from '../../functions/formatNumericInput';
 import React, {useState, useEffect} from 'react';
 import CloseBtn from '../../utility/CloseBtn';
 import AmountInput from '../../utility/AmountInput';
@@ -33,34 +34,13 @@ const AddExpenseModal = props => {
   const [noExpenseAddedError, setNoExpenseAddedError] = useState(false);
   const [noCategorySelected, setNoCategorySelected] = useState(false);
 
-  const formatExpenseInput = input => {
-    input = input.replace(/[^0-9]/g, '');
-    if (input.length > 8) {
-      setExpenseTotal(expenseTotal);
-    } else if (input.length > 5) {
-      setExpenseTotal(
-        `${input.slice(0, input.length - 5)},${input.slice(
-          input.length - 5,
-          input.length - 2,
-        )}.${input.slice(input.length - 2, input.length)}`,
-      );
-    } else if (input.length > 2) {
-      setExpenseTotal(
-        `${input.slice(0, input.length - 2)}.${input.slice(
-          input.length - 2,
-          input.length,
-        )}`,
-      );
-    } else if (input.length === 1) {
-      if (input === '0') {
-        setExpenseTotal('');
-      } else {
-        setNoExpenseAddedError(false);
-        setExpenseTotal(input);
-      }
-    } else {
-      setExpenseTotal(input);
-    }
+  const runFormatFunction = input => {
+    formatExpenseInput(
+      input,
+      setExpenseTotal,
+      expenseTotal,
+      setNoExpenseAddedError,
+    );
   };
 
   const setCurrentDates = () => {
@@ -114,8 +94,10 @@ const AddExpenseModal = props => {
           }}>
           <Text style={styles.expenseInputText}>$</Text>
           <AmountInput
+            placeholderProp="0.00"
+            fontSizeProp={22}
             valueProp={expenseTotal}
-            onChangeProp={formatExpenseInput}
+            onChangeProp={runFormatFunction}
           />
           {noExpenseAddedError && (
             <Text style={[styles.errorText, {bottom: -20}]}>
@@ -177,9 +159,9 @@ const AddExpenseModal = props => {
           </Text>
           <View style={styles.categoryContainer}>
             <ExpenseCategoryContainer
-              expenseCategory={expenseCategory}
-              setExpenseCategory={setExpenseCategory}
-              setNoCategorySelected={setNoCategorySelected}
+              expenseCategoryStateProp={expenseCategory}
+              setExpenseCategoryStateProp={setExpenseCategory}
+              setNoCategoryErrorProp={setNoCategorySelected}
             />
             {noCategorySelected && (
               <Text style={[styles.errorText, {bottom: -15}]}>
