@@ -2,6 +2,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import CloseBtn from '../../utility/CloseBtn';
 import AmountInput from '../../utility/AmountInput';
+import DescriptionInput from '../../utility/DescriptionInput';
 import ModalSaveBtn from '../../utility/ModalSaveBtn';
 import DayDropDown from './selectorComponent/DayDropDown';
 import DaysInDropDown from './selectorComponent/DaysInDropDown';
@@ -12,6 +13,8 @@ import YearsInDropDown from './selectorComponent/YearsInDropDown';
 
 const AddIncomeModal = props => {
   const [additionalIncome, setAdditionalIncome] = useState('');
+  const [description, setDescription] = useState('');
+  const [noDescriptionError, setNoDescriptionError] = useState(false);
   const [expenseDay, setExpenseDay] = useState(0);
   const [isDaySelectorOpen, setIsDaySelectorOpen] = useState(false);
   const [dropDownDays, setDropDownDays] = useState(0);
@@ -52,17 +55,23 @@ const AddIncomeModal = props => {
   };
 
   const validateData = () => {
-    if (additionalIncome !== '') {
+    if (additionalIncome === '') {
+      setNoIncomeInputError(true);
+    }
+    if (description === '') {
+      setNoDescriptionError(true);
+    }
+
+    if (additionalIncome !== '' && description !== '') {
       props.saveExtraIncome(
         additionalIncome,
+        description,
         expenseDay,
         expenseMonth,
         expenseYear,
       );
       props.setUpdateUserData(!props.updateUserData);
       props.closeAddIncomeModal();
-    } else {
-      return setNoIncomeInputError(true);
     }
   };
 
@@ -101,9 +110,12 @@ const AddIncomeModal = props => {
             onChangeProp={formatInput}
           />
           {noIncomeInputError ? (
-            <Text>Please add the amount of extra income for this month</Text>
+            <Text style={[styles.errorText, {bottom: -20}]}>
+              Please incluse the amount of extra income
+            </Text>
           ) : null}
         </View>
+        <Text style={styles.expenseTitle}>Date</Text>
         <View style={styles.dateContainer}>
           <MonthDropDown
             expenseMonth={expenseMonth}
@@ -149,6 +161,18 @@ const AddIncomeModal = props => {
               setIsYearSelectorOpen={setIsYearSelectorOpen}
             />
           ) : null}
+        </View>
+        <View>
+          <Text style={styles.expenseTitle}>Description</Text>
+          <DescriptionInput
+            onChangeProp={setDescription}
+            valueProp={description}
+          />
+          {noDescriptionError && (
+            <Text style={[styles.errorText, {bottom: -10}]}>
+              Please include a description
+            </Text>
+          )}
         </View>
         <View style={{alignItems: 'center'}}>
           <ModalSaveBtn text={'Add Income'} onPressProp={validateData} />
@@ -208,5 +232,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 15,
+  },
+  errorText: {
+    position: 'absolute',
+    right: 0,
+    left: 0,
+    textAlign: 'center',
+    color: '#b31515',
+    fontWeight: 'bold',
   },
 });
