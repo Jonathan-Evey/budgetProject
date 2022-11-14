@@ -4,8 +4,14 @@ import React from 'react';
 const AmountInput = props => {
   return (
     <TextInput
-      style={styles.expenseAmountInput}
-      placeholder="0.00"
+      style={[
+        styles.expenseAmountInput,
+        {
+          fontSize: props.fontSizeProp,
+          backgroundColor: props.backgroundColorProp,
+        },
+      ]}
+      placeholder={props.placeholderProp}
       keyboardType="numeric"
       value={props.valueProp}
       textAlign="right"
@@ -20,7 +26,6 @@ const styles = StyleSheet.create({
   expenseAmountInput: {
     fontWeight: 'bold',
     color: '#223252',
-    fontSize: 22,
     width: '100%',
     borderRadius: 15,
     borderBottomWidth: 2,
