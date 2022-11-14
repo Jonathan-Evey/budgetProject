@@ -16,7 +16,6 @@ const BudgetCardSpent = props => {
         )}.${spentAmount.slice(spentAmount.length - 2, spentAmount.length)}`,
       );
     } else {
-      console.log(props.spent.length);
       return setSpentAmount(`$${props.spent}`);
     }
   };
@@ -68,7 +67,11 @@ const BudgetCardSpent = props => {
           onPress={props.openLogExpenseModal}>
           <Text style={styles.btnText}>Enter Expense</Text>
         </TouchableOpacity>
-        <ToExpensesBtn userData={props.userData} />
+        <ToExpensesBtn
+          userData={props.userData}
+          setUpdateUserData={props.setUpdateUserData}
+          updateUserData={props.updateUserData}
+        />
       </View>
     </>
   );

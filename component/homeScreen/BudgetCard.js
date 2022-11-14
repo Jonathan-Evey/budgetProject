@@ -66,6 +66,8 @@ const BudgetCard = props => {
           {isSeeDetails ? (
             <BudgetCardSpent
               userData={props.userData}
+              setUpdateUserData={props.setUpdateUserData}
+              updateUserData={props.updateUserData}
               budget={props.budget}
               spent={props.currentPaidExpenses}
               spentOverBudget={props.spentOverBudget}
