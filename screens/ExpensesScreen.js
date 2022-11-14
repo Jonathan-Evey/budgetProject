@@ -2,9 +2,12 @@ import {StyleSheet, Text, View, TouchableOpacity, FlatList} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import EachYearsExpenses from '../component/expensesScreen/EachYearsExpenses';
+import EditMenuBtn from '../utility/EditMenuBtn';
 
 const ExpensesScreen = ({route}) => {
-  const [allMonthsInYears, setallMonthsInYears] = useState([]);
+  const [allMonthsInYears, setAllMonthsInYears] = useState([]);
+  const [isDelete, setIsDelete] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const {userData} = route.params;
 
   const objKeyValues = obj => {
@@ -19,7 +22,7 @@ const ExpensesScreen = ({route}) => {
     let allYears = objKeyValues(userData.expenses).sort(function (a, b) {
       return b - a;
     });
-    let allMonthInYears = [];
+    let allMonths = [];
     allYears.forEach(year => {
       let monthArray = objKeyValues(userData.expenses[year]).sort(function (
         a,
@@ -27,11 +30,11 @@ const ExpensesScreen = ({route}) => {
       ) {
         return b - a;
       });
-      allMonthInYears.push(EachYear(year, monthArray));
+      allMonths.push(EachYear(year, monthArray));
     });
-    setallMonthsInYears(allMonthInYears);
+    setAllMonthsInYears(allMonths);
     console.log(allYears);
-    console.log(allMonthInYears);
+    console.log(allMonths);
   };
 
   useEffect(() => {
@@ -39,17 +42,24 @@ const ExpensesScreen = ({route}) => {
   }, []);
 
   return (
-    <SafeAreaView style={[styles.container, {paddingTop: 75}]}>
+    <SafeAreaView style={[styles.container, {paddingTop: 50}]}>
       {allMonthsInYears !== [] ? (
         <FlatList
           style={styles.card}
           data={allMonthsInYears}
           renderItem={({item}) => (
-            <EachYearsExpenses data={item} userData={userData} />
+            <EachYearsExpenses
+              allMonthsInYears={allMonthsInYears}
+              data={item}
+              userData={userData}
+              isEdit={isEdit}
+              isDelete={isDelete}
+            />
           )}
           keyExtractor={(item, index) => index}
         />
       ) : null}
+      <EditMenuBtn />
     </SafeAreaView>
   );
 };
