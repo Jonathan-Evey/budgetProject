@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View, TouchableOpacity, Animated} from 'react-native';
 import React, {useState, useEffect} from 'react';
 
-const EditMenuBtn = () => {
+const EditMenuBtn = props => {
   const showMenu = useState(new Animated.Value(50))[0];
   const toLeft = useState(new Animated.Value(50))[0];
   const toRight = useState(new Animated.Value(-50))[0];
@@ -91,6 +91,10 @@ const EditMenuBtn = () => {
   };
 
   const toggleMenu = () => {
+    if (isMenuOpen) {
+      props.setIsEdit(false);
+      props.setIsDelete(false);
+    }
     setIsMenuOpen(!isMenuOpen);
   };
 
@@ -132,7 +136,10 @@ const EditMenuBtn = () => {
               {scaleX: width},
             ],
           },
-        ]}>
+        ]}
+        onPress={() => {
+          props.toggleDeleteBtns();
+        }}>
         <Animated.Text
           style={[styles.menuOptionBtnText, {opacity: opacityTwo}]}>
           Delete
@@ -155,7 +162,10 @@ const EditMenuBtn = () => {
               {scaleX: width},
             ],
           },
-        ]}>
+        ]}
+        onPress={() => {
+          props.toggleEditBtns();
+        }}>
         <Animated.Text
           style={[styles.menuOptionBtnText, {opacity: opacityTwo}]}>
           Edit
