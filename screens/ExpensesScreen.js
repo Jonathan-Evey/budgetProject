@@ -33,8 +33,6 @@ const ExpensesScreen = ({route}) => {
       allMonths.push(EachYear(year, monthArray));
     });
     setAllMonthsInYears(allMonths);
-    console.log(allYears);
-    console.log(allMonths);
   };
 
   useEffect(() => {
