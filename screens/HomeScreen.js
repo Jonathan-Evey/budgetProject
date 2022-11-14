@@ -189,6 +189,7 @@ const HomeScreen = ({navigation}) => {
   ) => {
     let fullDate = `${monthData}${dayData}${yearData}`;
     let newObj = {
+      id: new Date().getTime(),
       date: Number(fullDate),
       expenseAmount: amountData,
       expenseName: category,
@@ -211,9 +212,17 @@ const HomeScreen = ({navigation}) => {
       });
   };
 
-  const saveExtraIncome = async (amountData, dayData, monthData, yearData) => {
+  const saveExtraIncome = async (
+    amountData,
+    descriptionData,
+    dayData,
+    monthData,
+    yearData,
+  ) => {
     let newObj = {
+      id: new Date().getTime(),
       amount: amountData,
+      description: descriptionData,
       day: dayData,
       month: monthData,
       year: yearData,
