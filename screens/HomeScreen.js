@@ -249,6 +249,7 @@ const HomeScreen = ({navigation}) => {
   };
 
   useEffect(() => {
+    console.log('userDataUpdated');
     checkForData();
   }, [updateUserData]);
 
@@ -265,6 +266,8 @@ const HomeScreen = ({navigation}) => {
       {userData ? (
         <BudgetCard
           userData={userData}
+          setUpdateUserData={setUpdateUserData}
+          updateUserData={updateUserData}
           isAdditionalIncome={isAdditionalIncome}
           budgetUsedPercent={budgetUsedPercent}
           spentPercent={spentPercent}
