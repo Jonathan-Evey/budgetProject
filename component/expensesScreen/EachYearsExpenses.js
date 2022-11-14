@@ -11,7 +11,15 @@ import React, {useState, useRef, useEffect} from 'react';
 import EachMonthsExpenses from './EachMonthsExpenses';
 import DropDownMenuIcon from '../../utility/DropDownMenuIcon';
 
-const EachYearsExpenses = ({data, userData, allMonthsInYears}) => {
+const EachYearsExpenses = ({
+  data,
+  userData,
+  allMonthsInYears,
+  setUpdateUserData,
+  updateUserData,
+  isEdit,
+  isDelete,
+}) => {
   const [isShowMonths, setIsShowMonths] = useState(false);
   const [isLastCard, setIsLastCard] = useState(false);
   const toggleMonthsShown = useRef(new Animated.Value(0)).current;
@@ -64,9 +72,13 @@ const EachYearsExpenses = ({data, userData, allMonthsInYears}) => {
                   data={item}
                   userData={userData}
                   year={data.year}
+                  setUpdateUserData={setUpdateUserData}
+                  updateUserData={updateUserData}
+                  isEdit={isEdit}
+                  isDelete={isDelete}
                 />
               )}
-              keyExtractor={(item, index) => index}
+              keyExtractor={item => item}
             />
           </Animated.View>
         )}

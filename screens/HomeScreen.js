@@ -237,7 +237,6 @@ const HomeScreen = ({navigation}) => {
     )
       .then(() => {
         setUpdateUserData(!updateUserData);
-        console.log('data added');
       })
       .catch(error => {
         console.log(error);
@@ -249,7 +248,6 @@ const HomeScreen = ({navigation}) => {
   };
 
   useEffect(() => {
-    console.log('userDataUpdated');
     checkForData();
   }, [updateUserData]);
 
@@ -262,7 +260,6 @@ const HomeScreen = ({navigation}) => {
           isMainNavOpen={isMainNavOpen}
         />
       </View>
-      {/* <BudgetCard budget={0} openBudgetModal={openBudgetModal} /> */}
       {userData ? (
         <BudgetCard
           userData={userData}
