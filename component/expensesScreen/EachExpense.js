@@ -19,10 +19,12 @@ const EachExpense = ({
   data,
   updateUserData,
   setUpdateUserData,
+  deleteExpense,
   isEdit,
   isDelete,
 }) => {
   const [isExpenseOnEdit, setIsExpenseOnEdit] = useState(false);
+  const [isExpenseOnDelete, setIsExpenseOnDelete] = useState(false);
   const [expenseCategory, setExpenseCategory] = useState('');
   const [expenseAmountText, setExpenseAmountText] = useState('');
   const [expenseDayText, setExpenseDayText] = useState('');
@@ -190,8 +192,17 @@ const EachExpense = ({
     setIsExpenseOnEdit(!isExpenseOnEdit);
   };
 
-  const setDelete = dataToEdit => {
-    console.log(dataToEdit);
+  const cancelEdit = data => {
+    setIsExpenseOnEdit(false);
+    setShowCategoryOptions(false);
+    setExpenseCategory(data.expenseName);
+    setExpenseAmountText(data.expenseAmount);
+    setExpenseDayText(formatDate(month, data.date));
+    setExpenseDescriptionText(data.description);
+  };
+
+  const toggleDeleteConfirm = () => {
+    setIsExpenseOnDelete(!isExpenseOnDelete);
   };
 
   useEffect(() => {
@@ -318,13 +329,13 @@ const EachExpense = ({
             style={[
               styles.cardText,
               {
-                Width: '75%',
+                flexGrow: 1,
                 fontSize: 14,
                 color: '#384763',
                 paddingVertical: -5,
                 paddingLeft: 15,
                 paddingRight: 15,
-                marginRight: 60,
+                marginRight: 15,
                 borderBottomColor: '#384763',
                 borderBottomWidth: 2,
                 borderRadius: 250,
@@ -338,29 +349,74 @@ const EachExpense = ({
             }}
           />
         )}
-
-        {isEdit && (
+        {isEdit && !isExpenseOnEdit ? (
           <TouchableOpacity
             style={styles.updateBtn}
             onPress={() => {
               setEdit(data);
             }}>
-            <Text style={styles.updateBtnText}>
-              {isExpenseOnEdit ? 'Save' : 'Edit'}
-            </Text>
+            <Text style={styles.updateBtnText}>Edit</Text>
           </TouchableOpacity>
-        )}
-        {isDelete && (
+        ) : null}
+        {isEdit && isExpenseOnEdit ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 5,
+            }}>
+            <TouchableOpacity
+              style={[styles.updateBtn, {marginRight: 15}]}
+              onPress={() => {
+                cancelEdit(data);
+              }}>
+              <Text style={styles.updateBtnText}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.updateBtn}
+              onPress={() => {
+                setEdit(data);
+              }}>
+              <Text style={styles.updateBtnText}>Save</Text>
+            </TouchableOpacity>
+          </View>
+        ) : null}
+        {isDelete && !isExpenseOnDelete ? (
           <TouchableOpacity
             style={[styles.updateBtn, styles.deleteBtn]}
             onPress={() => {
-              setDelete(data);
+              toggleDeleteConfirm();
             }}>
             <Text style={[styles.updateBtnText, styles.deleteBtnText]}>
               Delete
             </Text>
           </TouchableOpacity>
-        )}
+        ) : null}
+        {isDelete && isExpenseOnDelete ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 5,
+            }}>
+            <TouchableOpacity
+              style={[styles.updateBtn, styles.deleteBtn, {marginRight: 15}]}
+              onPress={() => {
+                toggleDeleteConfirm(data);
+              }}>
+              <Text style={[styles.updateBtnText, styles.deleteBtnText]}>
+                Cancel
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.updateBtn, styles.deleteBtn]}
+              onPress={() => {
+                deleteExpense(data);
+              }}>
+              <Text style={[styles.updateBtnText, styles.deleteBtnText]}>
+                Confirm
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : null}
       </View>
     </View>
   );
