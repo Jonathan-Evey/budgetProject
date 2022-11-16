@@ -1,5 +1,5 @@
 import React from 'react';
-import {UIManager} from 'react-native';
+import {Text, TouchableOpacity, UIManager} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LandingScreen from './screens/LandingScreen';
@@ -70,6 +70,11 @@ const App = () => {
               fontWeight: 'bold',
               fontSize: 28,
             },
+            headerRight: () => (
+              <TouchableOpacity title="Add expense">
+                <Text>Add Expense</Text>
+              </TouchableOpacity>
+            ),
           }}
           component={ExpensesScreen}
         />

@@ -73,12 +73,14 @@ const HomeScreen = ({navigation}) => {
       let additionalIncomeTotal = 0;
       budgetData.additionalIncome.forEach(entry => {
         if (entry.month === month && entry.year === year) {
-          additionalIncomeTotal =
-            additionalIncomeTotal + Number(entry.amount.replace(/,/g, ''));
+          console.log(additionalIncomeTotal);
+          additionalIncomeTotal = additionalIncomeTotal + entry.amount;
+          console.log(additionalIncomeTotal);
         }
       });
       if (additionalIncomeTotal !== 0) {
         let budgetTotal = additionalIncomeTotal + budgetData.mainBudget;
+        console.log(budgetTotal);
         setIsAdditionalIncome(true);
         setTotalBudgetAmount(budgetTotal);
         return checkBudgetUsedPercent(budgetTotal, currentMonthExpenseData);
@@ -100,7 +102,7 @@ const HomeScreen = ({navigation}) => {
         if (objKeyValues(data.expenses[year], `${month}`)) {
           let total = 0;
           data.expenses[year][month].map(each => {
-            total = total + Number(each.expenseAmount.replace(/,/g, ''));
+            total = total + each.expenseAmount;
           });
           setCurrentPaidExpense(total);
           return total;
@@ -191,7 +193,7 @@ const HomeScreen = ({navigation}) => {
     let newObj = {
       id: new Date().getTime(),
       date: Number(fullDate),
-      expenseAmount: amountData,
+      expenseAmount: Number(amountData),
       expenseName: category,
       description: descriptionData,
     };
@@ -221,7 +223,7 @@ const HomeScreen = ({navigation}) => {
   ) => {
     let newObj = {
       id: new Date().getTime(),
-      amount: amountData,
+      amount: Number(amountData),
       description: descriptionData,
       day: dayData,
       month: monthData,

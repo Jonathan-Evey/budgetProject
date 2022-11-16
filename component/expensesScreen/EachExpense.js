@@ -120,7 +120,7 @@ const EachExpense = ({
     let newExpenseData = {
       date: Number(formatNewDate(month, data.date)),
       description: expenseDescriptionText,
-      expenseAmount: expenseAmountText,
+      expenseAmount: Number(expenseAmountText),
       expenseName: expenseCategory,
       id: originalExpenseData.id,
     };
@@ -167,10 +167,12 @@ const EachExpense = ({
   };
 
   const checkIfUpdated = originalExpenseData => {
+    console.log(originalExpenseData.expenseAmount === expenseAmountText);
+
     if (expenseCategory !== originalExpenseData.expenseName) {
       return updateExpense(originalExpenseData);
     }
-    if (expenseAmountText !== originalExpenseData.expenseAmount) {
+    if (Number(expenseAmountText) !== originalExpenseData.expenseAmount) {
       return updateExpense(originalExpenseData);
     }
     if (expenseDayText !== formatDate(month, data.date)) {
@@ -182,6 +184,7 @@ const EachExpense = ({
   };
 
   const setEdit = originalExpenseData => {
+    console.log(originalExpenseData);
     if (isExpenseOnEdit) {
       setShowCategoryOptions(false);
       checkIfUpdated(originalExpenseData);
@@ -196,7 +199,7 @@ const EachExpense = ({
     setIsExpenseOnEdit(false);
     setShowCategoryOptions(false);
     setExpenseCategory(data.expenseName);
-    setExpenseAmountText(data.expenseAmount);
+    setExpenseAmountText(data.expenseAmount.toFixed(2));
     setExpenseDayText(formatDate(month, data.date));
     setExpenseDescriptionText(data.description);
   };
@@ -212,9 +215,38 @@ const EachExpense = ({
     }
   }, [isEdit]);
 
+  const formatSpentAmount = amount => {
+    let expenseAmount = amount.toString().replace(/[^0-9]/g, '');
+
+    if (expenseAmount.length > 5) {
+      return setExpenseAmountText(
+        `${expenseAmount.slice(
+          0,
+          expenseAmount.length - 5,
+        )},${expenseAmount.slice(
+          expenseAmount.length - 5,
+          expenseAmount.length - 2,
+        )}.${expenseAmount.slice(
+          expenseAmount.length - 2,
+          expenseAmount.length,
+        )}`,
+      );
+    } else {
+      return setExpenseAmountText(
+        `${expenseAmount.slice(
+          0,
+          expenseAmount.length - 2,
+        )}.${expenseAmount.slice(
+          expenseAmount.length - 2,
+          expenseAmount.length,
+        )}`,
+      );
+    }
+  };
+
   useEffect(() => {
     setExpenseCategory(data.expenseName);
-    setExpenseAmountText(data.expenseAmount);
+    formatSpentAmount(data.expenseAmount.toFixed(2));
     setExpenseDayText(formatDate(month, data.date));
     setExpenseDescriptionText(data.description);
   }, []);
@@ -277,7 +309,7 @@ const EachExpense = ({
                 backgroundColorProp={'#d3d9d6'}
                 placeholderProp="0.00"
                 fontSizeProp={16}
-                valueProp={expenseAmountText}
+                valueProp={expenseAmountText.toFixed(2).toString()}
                 onChangeProp={runFormatFunction}
               />
             </View>

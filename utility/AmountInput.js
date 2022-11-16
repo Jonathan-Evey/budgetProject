@@ -1,7 +1,12 @@
 import {StyleSheet, TextInput} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 const AmountInput = props => {
+  useEffect(() => {
+    if (typeof props.valueProp === 'number') {
+      console.log(props.valueProp);
+    }
+  }, []);
   return (
     <TextInput
       style={[

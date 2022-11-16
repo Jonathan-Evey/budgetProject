@@ -1,10 +1,12 @@
 import {StyleSheet, Text, View, TouchableOpacity, FlatList} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useNavigation} from '@react-navigation/native';
 import EachYearsExpenses from '../component/expensesScreen/EachYearsExpenses';
 import EditMenuBtn from '../utility/EditMenuBtn';
 
 const ExpensesScreen = ({route}) => {
+  const navigation = useNavigation();
   const [allMonthsInYears, setAllMonthsInYears] = useState([]);
   const [isDelete, setIsDelete] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -19,6 +21,9 @@ const ExpensesScreen = ({route}) => {
   };
 
   const formatExpensesData = () => {
+    if (!userData.expenses) {
+      return;
+    }
     let allYears = objKeyValues(userData.expenses).sort(function (a, b) {
       return b - a;
     });
@@ -52,6 +57,20 @@ const ExpensesScreen = ({route}) => {
   useEffect(() => {
     formatExpensesData();
   }, []);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          title="Add expense"
+          onPress={() => {
+            console.log('hedder button');
+          }}>
+          <Text>Add Expense</Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
 
   return (
     <SafeAreaView style={[styles.container, {paddingTop: 50}]}>

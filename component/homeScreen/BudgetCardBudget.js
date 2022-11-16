@@ -7,8 +7,10 @@ const BudgetCardBudget = props => {
 
   const formatBudgetRemaining = () => {
     let amountRemaining = (props.budget - props.budgetSpent)
+      .toFixed(2)
       .toString()
       .replace(/[^0-9]/g, '');
+    console.log(amountRemaining);
     if (amountRemaining.length > 5) {
       return setRemainingAmount(
         `$${amountRemaining.slice(
@@ -23,12 +25,22 @@ const BudgetCardBudget = props => {
         )}`,
       );
     } else {
-      return setRemainingAmount(`$${props.budget - props.budgetSpent}`);
+      return setRemainingAmount(
+        `$${amountRemaining.slice(
+          0,
+          amountRemaining.length - 2,
+        )}.${amountRemaining.slice(
+          amountRemaining.length - 2,
+          amountRemaining.length,
+        )}`,
+      );
     }
   };
 
   useEffect(() => {
     formatBudgetRemaining();
+    console.log(props.budget);
+    console.log(props.budgetSpent);
   }, [props.budget]);
 
   return (

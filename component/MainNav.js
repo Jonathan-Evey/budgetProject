@@ -41,9 +41,9 @@ const MainNav = props => {
   return (
     <Animated.View
       style={[styles.mainNav, {transform: [{translateX: toTheRightValue}]}]}>
-      <Text>MainNav</Text>
-      <TouchableOpacity onPress={handleSignOut}>
-        <Text>Sign Out</Text>
+      <View></View>
+      <TouchableOpacity style={styles.signOutBtn} onPress={handleSignOut}>
+        <Text style={styles.signOutBtnText}>Sign Out</Text>
       </TouchableOpacity>
     </Animated.View>
   );
@@ -54,10 +54,25 @@ export default MainNav;
 const styles = StyleSheet.create({
   mainNav: {
     position: 'absolute',
+    justifyContent: 'space-between',
     height: '100%',
     width: 200,
     alignSelf: 'flex-end',
     backgroundColor: '#223252',
     zIndex: 3,
+  },
+  signOutBtn: {
+    marginBottom: 25,
+    paddingVertical: 25,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: '#384763',
+  },
+  signOutBtnText: {
+    fontSize: 14,
+    textTransform: 'uppercase',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: '#d3d9d6',
   },
 });

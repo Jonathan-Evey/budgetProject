@@ -16,7 +16,12 @@ const BudgetCardSpent = props => {
         )}.${spentAmount.slice(spentAmount.length - 2, spentAmount.length)}`,
       );
     } else {
-      return setSpentAmount(`$${props.spent}`);
+      return setSpentAmount(
+        `$${spentAmount.slice(0, spentAmount.length - 2)}.${spentAmount.slice(
+          spentAmount.length - 2,
+          spentAmount.length,
+        )}`,
+      );
     }
   };
 
