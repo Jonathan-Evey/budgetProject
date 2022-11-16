@@ -8,6 +8,8 @@ import {
   LayoutAnimation,
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
+import {doc, setDoc} from 'firebase/firestore/lite';
+import {auth, db} from '../../firebase';
 import EachExpense from './EachExpense';
 import DropDownMenuIcon from '../../utility/DropDownMenuIcon';
 
@@ -55,6 +57,48 @@ const EachMonthsExpenses = ({
     setSortedExpenses(expensesInMonth);
   };
 
+  const updateExpenseScreenOnDelete = index => {
+    let updatedExpenses = [
+      ...sortedExpenses.slice(0, index),
+      ...sortedExpenses.slice(index + 1),
+    ];
+    updateUserDatabase(updatedExpenses);
+    setSortedExpenses(updatedExpenses);
+  };
+
+  const updateUserDatabase = async updatedMonthData => {
+    let currentData = userData.expenses;
+    let currentYearData = userData.expenses[year];
+    let updatedExpenses = {
+      ...currentData,
+      [year]: {
+        ...currentYearData,
+        [data]: updatedMonthData,
+      },
+    };
+    await setDoc(
+      doc(db, 'users', auth.currentUser.uid),
+      {
+        expenses: updatedExpenses,
+      },
+      {merge: true},
+    )
+      .then(() => {
+        setUpdateUserData(!updateUserData);
+        console.log('data added');
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  const deleteExpense = expenseToDelete => {
+    let index = sortedExpenses.findIndex(
+      each => each.id === expenseToDelete.id,
+    );
+    updateExpenseScreenOnDelete(index);
+  };
+
   useEffect(() => {
     toggleEachExpense();
   }, [isShowEachExpense]);
@@ -71,54 +115,59 @@ const EachMonthsExpenses = ({
     sortData();
   }, []);
 
-  return (
-    <View style={styles.card}>
-      <TouchableOpacity
-        style={styles.monthHeader}
-        onPress={() => {
-          LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-          setIsShowEachExpense(!isShowEachExpense);
-        }}>
-        <Text style={styles.title}>{monthTextArray[data - 1]}</Text>
-        <DropDownMenuIcon
-          bgColor={'#7a8497'}
-          isDropDownOpen={isShowEachExpense}
-        />
-      </TouchableOpacity>
-
-      {isShowEachExpense && (
-        <>
-          <View style={styles.eachExpenseHeader}>
-            <Text style={styles.headerText}>Category</Text>
-            <Text
-              style={[
-                styles.headerText,
-                {textAlign: 'center', marginLeft: 20},
-              ]}>
-              Amount
-            </Text>
-            <Text style={[styles.headerText, {textAlign: 'right'}]}>Day</Text>
-          </View>
-          <FlatList
-            data={sortedExpenses}
-            renderItem={({item, index}) => (
-              <EachExpense
-                userData={userData}
-                year={year}
-                data={item}
-                month={data}
-                setUpdateUserData={setUpdateUserData}
-                updateUserData={updateUserData}
-                isEdit={isEdit}
-                isDelete={isDelete}
-              />
-            )}
-            keyExtractor={item => item.id}
+  if (userData.expenses[year][data].length !== 0) {
+    return (
+      <View style={styles.card}>
+        <TouchableOpacity
+          style={styles.monthHeader}
+          onPress={() => {
+            LayoutAnimation.configureNext(
+              LayoutAnimation.Presets.easeInEaseOut,
+            );
+            setIsShowEachExpense(!isShowEachExpense);
+          }}>
+          <Text style={styles.title}>{monthTextArray[data - 1]}</Text>
+          <DropDownMenuIcon
+            bgColor={'#7a8497'}
+            isDropDownOpen={isShowEachExpense}
           />
-        </>
-      )}
-    </View>
-  );
+        </TouchableOpacity>
+
+        {isShowEachExpense && (
+          <>
+            <View style={styles.eachExpenseHeader}>
+              <Text style={styles.headerText}>Category</Text>
+              <Text
+                style={[
+                  styles.headerText,
+                  {textAlign: 'center', marginLeft: 20},
+                ]}>
+                Amount
+              </Text>
+              <Text style={[styles.headerText, {textAlign: 'right'}]}>Day</Text>
+            </View>
+            <FlatList
+              data={sortedExpenses}
+              renderItem={({item, index}) => (
+                <EachExpense
+                  userData={userData}
+                  year={year}
+                  data={item}
+                  month={data}
+                  deleteExpense={deleteExpense}
+                  setUpdateUserData={setUpdateUserData}
+                  updateUserData={updateUserData}
+                  isEdit={isEdit}
+                  isDelete={isDelete}
+                />
+              )}
+              keyExtractor={item => item.id}
+            />
+          </>
+        )}
+      </View>
+    );
+  }
 };
 
 export default EachMonthsExpenses;
