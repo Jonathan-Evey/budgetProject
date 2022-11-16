@@ -13,18 +13,13 @@ const DaysInDropDown = props => {
   };
 
   const setDaysInDropdown = (monthData, yearData) => {
-    console.log(monthData);
     if (match(monthData, thirtyOne)) {
-      console.log('set 31');
       props.setDropDownDays(31);
     } else if (match(monthData, thirty)) {
-      console.log('set 30');
       props.setDropDownDays(30);
     } else if (leapYear(yearData)) {
-      console.log('set 29');
       props.setDropDownDays(29);
     } else {
-      console.log('set 28');
       props.setDropDownDays(28);
     }
   };

@@ -91,7 +91,6 @@ const SignupScreen = ({navigation}) => {
   const registerUser = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
-        console.log(auth.currentUser.uid);
         setNewUserDb(auth.currentUser.uid);
         setIsNewUser(true);
       })

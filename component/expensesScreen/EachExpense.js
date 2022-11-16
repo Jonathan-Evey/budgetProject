@@ -27,6 +27,7 @@ const EachExpense = ({
   const [isExpenseOnDelete, setIsExpenseOnDelete] = useState(false);
   const [expenseCategory, setExpenseCategory] = useState('');
   const [expenseAmountText, setExpenseAmountText] = useState('');
+  const [ifEditCancelAmount, setIfEditCancelAmount] = useState('');
   const [expenseDayText, setExpenseDayText] = useState('');
   const [expenseDescriptionText, setExpenseDescriptionText] = useState('');
   const [showCategoryOptions, setShowCategoryOptions] = useState(false);
@@ -162,13 +163,11 @@ const EachExpense = ({
 
   const setInputState = originalExpenseData => {
     setExpenseCategory(originalExpenseData.expenseName);
-    setExpenseAmountText(originalExpenseData.expenseAmount);
+    setIfEditCancelAmount(expenseAmountText);
     setExpenseDayText(formatDate(month, data.date));
   };
 
   const checkIfUpdated = originalExpenseData => {
-    console.log(originalExpenseData.expenseAmount === expenseAmountText);
-
     if (expenseCategory !== originalExpenseData.expenseName) {
       return updateExpense(originalExpenseData);
     }
@@ -184,7 +183,6 @@ const EachExpense = ({
   };
 
   const setEdit = originalExpenseData => {
-    console.log(originalExpenseData);
     if (isExpenseOnEdit) {
       setShowCategoryOptions(false);
       checkIfUpdated(originalExpenseData);
@@ -199,7 +197,7 @@ const EachExpense = ({
     setIsExpenseOnEdit(false);
     setShowCategoryOptions(false);
     setExpenseCategory(data.expenseName);
-    setExpenseAmountText(data.expenseAmount.toFixed(2));
+    setExpenseAmountText(ifEditCancelAmount);
     setExpenseDayText(formatDate(month, data.date));
     setExpenseDescriptionText(data.description);
   };
@@ -309,7 +307,7 @@ const EachExpense = ({
                 backgroundColorProp={'#d3d9d6'}
                 placeholderProp="0.00"
                 fontSizeProp={16}
-                valueProp={expenseAmountText.toFixed(2).toString()}
+                valueProp={expenseAmountText}
                 onChangeProp={runFormatFunction}
               />
             </View>

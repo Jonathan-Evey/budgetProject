@@ -1,7 +1,12 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
+import {auth} from '../firebase';
 
 const LandingScreen = ({navigation}) => {
+  if (auth.currentUser) {
+    navigation.replace('Home');
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>

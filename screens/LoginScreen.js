@@ -19,7 +19,6 @@ const LoginScreen = ({navigation}) => {
   const signInUser = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then(result => {
-        console.log(result);
         setIsSignedIn(true);
       })
       .catch(error => {

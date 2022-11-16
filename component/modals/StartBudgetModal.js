@@ -30,23 +30,18 @@ const StartBudgetModal = props => {
           let date = new Date();
           let month = date.getMonth() + 1;
           let year = date.getFullYear();
-          console.log('Send Monthly Data');
-          console.log('Send One Time Add Data');
           return saveBudgetDataAdditionalIncome(
             auth.currentUser.uid,
             month,
             year,
           );
         } else {
-          console.log('Add One Time');
           return setAddAdditionalIncomeError(true);
         }
       } else {
-        console.log('Send Monthly Data');
         return saveBudgetData(auth.currentUser.uid);
       }
     } else {
-      console.log('Add Monthly');
       return setAddMainBudgetError(true);
     }
   };

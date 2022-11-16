@@ -70,6 +70,7 @@ const BudgetCard = props => {
               updateUserData={props.updateUserData}
               budget={props.budget}
               spent={props.currentPaidExpenses}
+              budgetRemaining={props.budgetRemaining}
               spentOverBudget={props.spentOverBudget}
               spentPercent={props.spentPercent}
               componentType={componentType.spent}

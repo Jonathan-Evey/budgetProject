@@ -13,6 +13,7 @@ const HomeScreen = ({navigation}) => {
   const [userData, setUsereData] = useState(null);
   const [updateUserData, setUpdateUserData] = useState(false);
   const [totalBudgetAmount, setTotalBudgetAmount] = useState(null);
+  const [budgetRemaining, setBudgetRemaining] = useState(null);
   const [isAdditionalIncome, setIsAdditionalIncome] = useState(false);
   const [currentPaidExpenses, setCurrentPaidExpense] = useState(null);
   const [budgetUsedPercent, setBudgetUsedPercent] = useState(null);
@@ -73,14 +74,11 @@ const HomeScreen = ({navigation}) => {
       let additionalIncomeTotal = 0;
       budgetData.additionalIncome.forEach(entry => {
         if (entry.month === month && entry.year === year) {
-          console.log(additionalIncomeTotal);
           additionalIncomeTotal = additionalIncomeTotal + entry.amount;
-          console.log(additionalIncomeTotal);
         }
       });
       if (additionalIncomeTotal !== 0) {
         let budgetTotal = additionalIncomeTotal + budgetData.mainBudget;
-        console.log(budgetTotal);
         setIsAdditionalIncome(true);
         setTotalBudgetAmount(budgetTotal);
         return checkBudgetUsedPercent(budgetTotal, currentMonthExpenseData);
@@ -104,8 +102,8 @@ const HomeScreen = ({navigation}) => {
           data.expenses[year][month].map(each => {
             total = total + each.expenseAmount;
           });
-          setCurrentPaidExpense(total);
-          return total;
+          setCurrentPaidExpense(total.toFixed(2));
+          return total.toFixed(2);
         }
       }
     }
@@ -117,8 +115,10 @@ const HomeScreen = ({navigation}) => {
     let percent = (expenses / total) * 100;
     let spentPercent = (expenses / total) * 100;
     let amountOverBudget = expenses - total;
+    let amountLeft = total - expenses;
     setSpentOverBudget(amountOverBudget);
     setSpentPercent(spentPercent);
+    setBudgetRemaining(amountLeft);
     return setBudgetUsedPercent(percent);
   };
 
@@ -269,6 +269,7 @@ const HomeScreen = ({navigation}) => {
           updateUserData={updateUserData}
           isAdditionalIncome={isAdditionalIncome}
           budgetUsedPercent={budgetUsedPercent}
+          budgetRemaining={budgetRemaining}
           spentPercent={spentPercent}
           spentOverBudget={spentOverBudget}
           budget={totalBudgetAmount}
