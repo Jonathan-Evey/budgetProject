@@ -38,8 +38,7 @@ const LoginScreen = ({navigation}) => {
       <View style={styles.containerHalf}>
         <Text style={styles.title}>Welcome back!</Text>
         <Text style={styles.subTitle}>
-          Please sign in to continue your buget and saving journey with
-          Allotment.
+          Please sign in to continue your buget and saving journey
         </Text>
       </View>
 
@@ -85,11 +84,14 @@ const styles = StyleSheet.create({
   title: {
     color: '#223252',
     fontWeight: 'bold',
-    fontSize: 32,
+    fontSize: 36,
   },
   subTitle: {
     color: '#223252',
+    fontWeight: 'bold',
     fontSize: 16,
+    paddingTop: 8,
+    paddingLeft: 5,
   },
   textInput: {
     borderBottomWidth: 2,
